@@ -1,0 +1,16 @@
+{
+	"folders":
+	[
+		{
+			"path": "/C/Users/Antoine/programmation/web/stencil-analysis",
+			"name":"stencil-analysis",
+			"folder_exclude_patterns":[
+				"git"
+			],
+			"file_exclude_patterns": [
+				".git*",
+				"*.sublime*"
+				],
+		}
+	]
+}
