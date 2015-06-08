@@ -1,6 +1,6 @@
-// > node scripts/results-parser.js
-var inputFilepath = 'json/pax-pilot.json';
-var outputFilepath = 'csv/durations.csv';
+// > node scripts/participant-durations.js
+var inputFilepath = 'pilots/kamyar-pilot.json';
+var outputFilepath = 'durations/kamyar-durations.csv';
 var fs = require('fs');
 
 Object.defineProperty(Object.prototype, "forEach", {
@@ -21,12 +21,24 @@ stream.writeCsvLine = function(array) {
    stream.write(array.join(",") + "\n")
 }
 
+// utility functions for writing trial data
+stream.writeTrialLine = function(trial, array) {
+   var info = [trial.number, trial.targetOption]
+   stream.writeCsvLine(info.concat(array))
+}
+stream.writeTrialsHeaders = function(array) {
+   var info = ["trialNumber", "targetOption"]
+   stream.writeCsvLine(info.concat(array))
+}
+
+// loop through the data and write relevant portions in the output file
 stream.once('open', function(fd) {
-   stream.writeCsvLine(["shortDuration", "longDuration"])
+   stream.writeTrialsHeaders(["shortDuration", "longDuration"])
 
    user.trials.forEach(function(trial) {
-      stream.writeCsvLine([trial.shortDuration, trial.longDuration])
+      stream.writeTrialLine(trial, [trial.duration.short, trial.duration.long])
    })
 
    stream.end();
+   console.log("output written in: ", outputFilepath)
 });
