@@ -11,6 +11,7 @@ Object.defineProperty(Object.prototype, "forEach", {
    }
 })
 
+
 // parse data for one user
 var user = JSON.parse(fs.readFileSync(inputFilepath, 'utf8'));
 console.log("Results file parsed: ", inputFilepath)
