@@ -6,5 +6,3 @@
 !scripts/
 !scripts/*
 !*.sublime-project
-!csv/
-!csv/*
