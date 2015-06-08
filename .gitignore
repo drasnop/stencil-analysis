@@ -4,3 +4,4 @@
 # except the scripts
 !.gitignore
 !*.js
+!*.sublime-project
