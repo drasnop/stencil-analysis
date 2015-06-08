@@ -4,4 +4,5 @@
 # except the scripts
 !.gitignore
 !scripts/
+!scripts/*
 !*.sublime-project
