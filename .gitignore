@@ -3,5 +3,5 @@
 
 # except the scripts
 !.gitignore
-!*.js
+!scripts/
 !*.sublime-project
