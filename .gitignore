@@ -3,4 +3,4 @@
 
 # except the scripts
 !.gitignore
-!scripts/
+!*.js
