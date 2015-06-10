@@ -123,15 +123,37 @@ exports.uniqueDuplicateParticipants = function() {
    return duplicates;
 }
 
-// write an entire csv file at once, from a 2D array of data
-exports.writeCsvFile = function(filename, data) {
 
+// convert array of JSON objects into a multi-line csv representation
+function JSONtoCSV(data) {
+
+   var array = [];
+
+   // headers are the keys of each JSON object
+   array.push(Object.keys(data[0]))
+
+   // flatten the JSON into an array representation
+   data.forEach(function(JSONline) {
+      array.push(Object.keys(JSONline).map(function(key) {
+         return JSONline[key];
+      }))
+   });
+
+   return ArrayToCSV(array);
+}
+
+// convert a 2D array into a multi-line csv representation
+function ArrayToCSV(data) {
    var csv = data.map(function(line) {
       return line.join(",");
    })
 
-   csv = csv.join("\n");
+   return csv.join("\n");
+}
 
+// write an entire csv file at once, from a JSON object
+exports.writeJSONtoCSVfile = function(filename, data) {
+   var csv = JSONtoCSV(data);
 
    fs.writeFile(filename, csv, function(err) {
       if (err) {
@@ -139,7 +161,6 @@ exports.writeCsvFile = function(filename, data) {
       }
       console.log("output written in: ", filename);
    })
-
 }
 
 

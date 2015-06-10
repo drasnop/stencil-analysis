@@ -16,7 +16,7 @@ console.log("Results file parsed: ", inputFilepath)
 
 // write summary of all the workers in this batch
 var workers = require("./workers.js");
-helpers.writeCsvFile(workers.filename, workers.output)
+helpers.writeJSONtoCSVfile(workers.filename, workers.output)
 
 
 // run other analysis

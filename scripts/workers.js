@@ -3,44 +3,50 @@
 // generate filename
 exports.filename = helpers.filename("workers");
 
-// define headers
-exports.output = [
-   ["workerId", "assignmentId", "defaults", "interface", "tutorial", "trials", "questionnaires", "duplicate", "complete", "valid"]
-];
-
 // parse data
+exports.output = [];
 input.forEach(function(worker) {
 
-   // # of tutorial steps completed, if any
-   var tutorial = worker.tutorial ? Object.keys(worker.tutorial).length : "";
+   exports.output.push({
 
-   // # of experiment trials completed, if any
-   var trials = worker.trials ? Object.keys(worker.trials).length : "";
+      // general information about this worker
+      "workerId": worker.info.worker_id,
+      "assignmentId": worker.info.assignment_id,
+      "defaults": worker.condition.oppositeDefaults ? "opposite" : "",
+      "interface": worker.condition.interface,
 
-   // "recognition", "preference", "all"
-   var questionnaires = "";
-   if (worker.questionnaires) {
-      if (worker.questionnaires.recognition)
-         questionnaires = "recognition";
-      if (worker.questionnaires.preference)
-         questionnaires = "preference";
+      // # of tutorial steps completed, if any
+      "tutorial": worker.tutorial ? Object.keys(worker.tutorial).length : "",
+
+      // # of experiment trials completed, if any
+      "trials": worker.trials ? Object.keys(worker.trials).length : "",
+
+      // "recognition", "preference", "all"
+      "questionnaires": latestQuestionnaireCompletedBy(worker),
+
+      // "duplicate" if worker participated more than once
+      "duplicate": helpers.isDuplicate(worker) ? "duplicate" : "",
+
+      // "complete" if the entire experiment was completed
+      "complete": helpers.isComplete(worker) ? "complete" : "",
+
+      // "valid" if worker completed the experiment, but did not atempt to complete it multiple times
+      "valid": helpers.isValid(worker) ? "valid" : "",
+   })
+
+   // assuming participants couldn't complete questionnaires not in the right order: recognition, preference, demographics
+   function latestQuestionnaireCompletedBy(worker) {
+      if (!worker.questionnaires)
+         return "";
       if (worker.questionnaires.demographics)
-         questionnaires = "all";
+         return "all";
+      if (worker.questionnaires.preference)
+         return "preference";
+      if (worker.questionnaires.recognition)
+         return "recognition";
    }
-
-   // "duplicate" if worker participated more than once
-   var duplicate = helpers.isDuplicate(worker) ? "duplicate" : "";
-
-   // "complete" if the entire experiment was completed
-   var complete = helpers.isComplete(worker) ? "complete" : "";
-
-   // "valid" if worker completed the experiment, but did not atempt to complete it multiple times
-   var valid = helpers.isValid(worker) ? "valid" : "";
-
-   exports.output.push([worker.info.worker_id, worker.info.assignment_id, worker.condition.oppositeDefaults ? "opposite" : "", worker.condition.interface,
-      tutorial, trials, questionnaires, duplicate, complete, valid
-   ]);
 });
+
 
 // print some summary statistics to the console
 console.log()
