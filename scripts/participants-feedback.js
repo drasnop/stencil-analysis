@@ -47,6 +47,10 @@ stream.once('open', function(fd) {
          console.log("Failure: user", user.info.worker_id, "completed only", Object.keys(user.trials).length, "trials")
          return;
       }
+      if (!user.questionnaires.preference) {
+         console.log("Failure: user", user.info.worker_id, "did not complete the preference questionnaire.")
+         return;
+      }
 
       // check for duplicate
       if (validParticipants.indexOf(user.info.worker_id) > 0) {

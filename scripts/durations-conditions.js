@@ -2,6 +2,8 @@ var inputFilepath = 'mturk/0-12.json';
 var outputFilepath = 'durations/durations-conditions-0-12.csv';
 var fs = require('fs');
 
+var noFailures = true; // if true, will also remove the timeouts
+
 Object.defineProperty(Object.prototype, "forEach", {
    value: function(callback) {
       Object.keys(this).forEach(function(key) {
@@ -40,6 +42,10 @@ stream.once('open', function(fd) {
          console.log("Failure: user", user.info.worker_id, "completed only", Object.keys(user.trials).length, "trials")
          return;
       }
+      if (!user.questionnaires.preference) {
+         console.log("Failure: user", user.info.worker_id, "did not complete the preference questionnaire.")
+         return;
+      }
 
       // check for duplicate
       if (validParticipants.indexOf(user.info.worker_id) > 0) {
@@ -52,13 +58,17 @@ stream.once('open', function(fd) {
 
       // compute average duration of this participant's trials
       var short = 0,
-         long = 0;
+         long = 0,
+         count = 0;
       user.trials.forEach(function(trial) {
-         short += trial.duration.short;
-         long += trial.duration.long;
+         if (trial.success || !noFailures) {
+            short += trial.duration.short;
+            long += trial.duration.long;
+            count++;
+         }
       })
-      short = short / Object.keys(user.trials).length;
-      long = long / Object.keys(user.trials).length;
+      short = short / count;
+      long = long / count;
 
       // add them
       conditionsShortDurations[user.condition.interface] += short;

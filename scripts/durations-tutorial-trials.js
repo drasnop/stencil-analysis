@@ -1,8 +1,6 @@
 var inputFilepath = 'mturk/0-12.json';
-var outputFilepath = 'durations/durations-participants-0-12.csv';
+var outputFilepath = 'durations/durations-tutorial-trials-0-12.csv';
 var fs = require('fs');
-
-var noFailures = true; // if true, will also remove the timeouts
 
 Object.defineProperty(Object.prototype, "forEach", {
    value: function(callback) {
@@ -34,7 +32,7 @@ stream.writeUserHeaders = function(array) {
 
 // loop through the data and write relevant portions in the output file
 stream.once('open', function(fd) {
-   stream.writeUserHeaders(["shortDuration", "longDuration"])
+   stream.writeUserHeaders(["tutorialDuration", "trialsDuration"])
 
    var validParticipants = [];
 
@@ -49,10 +47,6 @@ stream.once('open', function(fd) {
          console.log("Failure: user", user.info.worker_id, "completed only", Object.keys(user.trials).length, "trials")
          return;
       }
-      if (!user.questionnaires.preference) {
-         console.log("Failure: user", user.info.worker_id, "did not complete the preference questionnaire.")
-         return;
-      }
 
       // check for duplicate
       if (validParticipants.indexOf(user.info.worker_id) > 0) {
@@ -60,23 +54,24 @@ stream.once('open', function(fd) {
          return;
       }
 
+      // compute average tutorial duration
+      var tutorialDuration = 0;
+      user.tutorial.forEach(function(trial) {
+         tutorialDuration += trial.duration;
+      })
+      tutorialDuration = tutorialDuration / Object.keys(user.tutorial).length;
+
+      // compute average trial duration
+      var longDuration = 0;
+      user.trials.forEach(function(trial) {
+         longDuration += trial.duration.long;
+      })
+      longDuration = longDuration / Object.keys(user.trials).length;
+
       console.log("Success! user", user.info.worker_id, "completed the experiment successfully")
       validParticipants.push(user.info.worker_id);
 
-      // compute average duration of this participant's trials
-      var short = 0,
-         long = 0,
-         count = 0;
-      user.trials.forEach(function(trial) {
-         if (trial.success || !noFailures) {
-            short += trial.duration.short;
-            long += trial.duration.long;
-            count++;
-         }
-      })
-      short = short / count;
-      long = long / count;
-      stream.writeUserLine(user, [short, long])
+      stream.writeUserLine(user, [tutorialDuration, longDuration])
    });
 
    console.log(validParticipants.length, "valid participants");

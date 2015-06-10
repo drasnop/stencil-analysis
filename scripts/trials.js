@@ -32,7 +32,7 @@ stream.writeTrialsHeaders = function(array) {
 
 // loop through the data and write relevant portions in the output file
 stream.once('open', function(fd) {
-   stream.writeTrialsHeaders(["shortDuration", "longDuration"])
+   stream.writeTrialsHeaders(["shortDuration", "longDuration", "success"])
 
    var validParticipants = [];
 
@@ -59,7 +59,7 @@ stream.once('open', function(fd) {
 
       // log the duration of each trial
       user.trials.forEach(function(trial) {
-         stream.writeTrialLine(user, trial, [trial.duration.short, trial.duration.long])
+         stream.writeTrialLine(user, trial, [trial.duration.short, trial.duration.long, trial.success])
       })
    });
 
