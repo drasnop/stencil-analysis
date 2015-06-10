@@ -41,3 +41,14 @@ input.forEach(function(worker) {
       tutorial, trials, questionnaires, duplicate, complete, valid
    ]);
 });
+
+// print some summary statistics to the console
+console.log()
+console.log(Object.keys(input).length + " workers processed");
+console.log(Object.keys(helpers.duplicateParticipants()).length + " duplicate workers");
+console.log(Object.keys(helpers.uniqueDuplicateParticipants()).length + " unique duplicate participants");
+console.log(Object.keys(helpers.badDuplicateParticipants()).length + " bad duplicate participants");
+console.log(Object.keys(helpers.startedTutorialButNotCompleteParticipants()).length + " workers started tutorial but did not complete experiment");
+console.log(Object.keys(helpers.completeParticipants()).length + " complete participants");
+console.log(Object.keys(helpers.validParticipants()).length + " valid participants");
+console.log()

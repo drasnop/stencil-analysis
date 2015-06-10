@@ -44,7 +44,7 @@ exports.isDuplicate = function(worker) {
 }
 
 // check if one worker did the experiment multiple times
-// NB: criteria is tutorial started, not trials.length>=1, because they may have abandonned in the 1st trial
+// NB: criteria is tutorial started, not trials.length >= 1, because they may have abandonned in the 1st trial
 exports.isBadDuplicate = function(worker) {
 
    // this worker hasn't even started the tutorial
@@ -67,6 +67,27 @@ exports.isBadDuplicate = function(worker) {
 }
 
 
+// get all the workers in this batch who at least started the tutorial (not unique)
+exports.startedTutorialButNotCompleteParticipants = function() {
+   return input.filter(function(worker) {
+      return worker.tutorial && !exports.isComplete(worker);
+   })
+}
+
+// get all the duplicate participants in this batch (not unique)
+exports.duplicateParticipants = function() {
+   return input.filter(function(worker) {
+      return exports.isDuplicate(worker);
+   })
+}
+
+// get all the bad duplicate participants in this batch (not unique?)
+exports.badDuplicateParticipants = function() {
+   return input.filter(function(worker) {
+      return exports.isBadDuplicate(worker);
+   })
+}
+
 // filters out all the incomplete participants in this batch
 exports.completeParticipants = function() {
    return input.filter(function(worker) {
@@ -74,9 +95,16 @@ exports.completeParticipants = function() {
    })
 }
 
+// filters out all the invalid participants in this batch
+exports.validParticipants = function() {
+   return input.filter(function(worker) {
+      return exports.isValid(worker);
+   })
+}
+
 // indicate which participants tried to do the experiment multiple times (even if it was never valid)
 // NB: calling input.filter(isDuplicate) would cause the output to contain... duplicates!
-exports.duplicateParticipants = function() {
+exports.uniqueDuplicateParticipants = function() {
    var participantsIds = [];
    var duplicatesIds = []
    var duplicates = [];
@@ -94,7 +122,6 @@ exports.duplicateParticipants = function() {
 
    return duplicates;
 }
-
 
 // write an entire csv file at once, from a 2D array of data
 exports.writeCsvFile = function(filename, data) {
