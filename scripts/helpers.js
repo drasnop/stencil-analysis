@@ -5,6 +5,10 @@ exports.filename = function(name) {
    return batch + "/" + name + "-" + batch + ".csv";
 }
 
+// check if a worker has completed the experiment only once (can still be a duplicate, but only completing once)
+exports.isValid = function(worker) {
+   return exports.isComplete(worker) && !exports.isBadDuplicate(worker);
+}
 
 // check if one worker completed the entire experiment (does not check for duplicates)
 exports.isComplete = function(worker) {
@@ -33,6 +37,29 @@ exports.isDuplicate = function(worker) {
             return true;
          else
             seenBefore = true;
+      }
+   }
+
+   return false;
+}
+
+// check if one worker did the experiment multiple times
+// NB: criteria is tutorial started, not trials.length>=1, because they may have abandonned in the 1st trial
+exports.isBadDuplicate = function(worker) {
+
+   // this worker hasn't even started the tutorial
+   if (!worker.tutorial)
+      return false;
+
+   // Look for at least two instances in which they started the tutorial
+   var startedTutorialBefore = false;
+
+   for (var i in input) {
+      if (input[i].info.worker_id == worker.info.worker_id) {
+         if (startedTutorialBefore && input[i].tutorial)
+            return true;
+         else if (input[i].tutorial)
+            startedTutorialBefore = true;
       }
    }
 
