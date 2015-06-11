@@ -30,7 +30,7 @@ input.forEach(function(worker) {
       // "complete" if the entire experiment was completed
       "complete": helpers.isComplete(worker) ? "complete" : "",
 
-      // "valid" if worker completed the experiment, but did not atempt to complete it multiple times
+      // "valid" if worker completed the experiment, but did not attempt to complete it multiple times
       "valid": helpers.isValid(worker) ? "valid" : "",
    })
 

@@ -178,6 +178,12 @@ function writeFile(filename, content) {
    //})
 }
 
+// wrap string in double-quotes to allow commas, after replacing internal " by '
+exports.formatStringForCSV = function(string) {
+   if (!string)
+      return "";
+   return '"' + string.split('"').join("'") + '"';
+}
 
 /* add useful methods to all objects */
 

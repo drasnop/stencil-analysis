@@ -19,5 +19,8 @@ var workers = require("./workers.js");
 helpers.writeJSONtoCSVfile(workers.filename, workers.output)
 
 
+var questionnairesParticipants = require("./questionnaires-participants.js");
+helpers.writeJSONtoCSVfile(questionnairesParticipants.filename, questionnairesParticipants.output)
+
 // run other analysis
 //require("./trials.js");
