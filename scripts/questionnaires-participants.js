@@ -1,4 +1,4 @@
-/* write data from all 3 questionnaires for the workers in this batch */
+/* write data from all 3 questionnaires for the valid participants in this batch */
 
 // generate filename
 exports.filename = helpers.filename("questionnaires-participants");
@@ -9,10 +9,7 @@ helpers.validParticipants().forEach(function(participant) {
 
    exports.output.push({
 
-      // general information about this participant
       "workerId": participant.info.worker_id,
-      "defaults": participant.condition.oppositeDefaults ? "opposite" : "",
-      "interface": participant.condition.interface,
 
       /* demographics */
 
@@ -20,6 +17,11 @@ helpers.validParticipants().forEach(function(participant) {
       "age": getAge(participant),
       "computerUse": participant.questionnaires.demographics.computerUse,
       "wunderlistUse": participant.questionnaires.demographics.wunderlistUse,
+
+      /* general information about this participant */
+
+      "defaults": participant.condition.oppositeDefaults ? "opposite" : "",
+      "interface": participant.condition.interface,
 
       /* recognition */
 
