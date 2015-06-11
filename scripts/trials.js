@@ -1,70 +1,50 @@
-var inputFilepath = 'mturk/0-12.json';
-var outputFilepath = 'trials/trials-0-12.csv';
-var fs = require('fs');
+/* write data for each trial of each valid participant in this batch */
 
-Object.defineProperty(Object.prototype, "forEach", {
-   value: function(callback) {
-      Object.keys(this).forEach(function(key) {
-         callback(this[key]);
-      }, this)
-   }
-})
+// generate filename
+exports.filename = helpers.filename("trials");
 
-// parse data for one user
-var mturk = JSON.parse(fs.readFileSync(inputFilepath, 'utf8'));
-console.log("Results file parsed: ", inputFilepath)
+// parse data
+exports.output = [];
+helpers.validParticipants().forEach(function(participant) {
 
-// prepare write in csv
-var stream = fs.createWriteStream(outputFilepath);
-stream.writeCsvLine = function(array) {
-   stream.write(array.join(",") + "\n")
-}
+   participant.trials.forEach(function(trial) {
 
-// utility functions for writing trial data
-stream.writeTrialLine = function(user, trial, array) {
-   var info = [user.info.worker_id, user.condition.interface, user.condition.oppositeDefaults, trial.number, trial.targetOption]
-   stream.writeCsvLine(info.concat(array))
-}
-stream.writeTrialsHeaders = function(array) {
-   var info = ["workerId", "interface", "oppositeDefaults", "trialNumber", "targetOption"]
-   stream.writeCsvLine(info.concat(array))
-}
+      exports.output.push({
 
-// loop through the data and write relevant portions in the output file
-stream.once('open', function(fd) {
-   stream.writeTrialsHeaders(["shortDuration", "longDuration", "success"])
+         // general information about this participant
+         "worker_id": participant.info.worker_id,
+         "defaults": participant.condition.oppositeDefaults ? "opposite" : "",
+         "interface": participant.condition.interface,
 
-   var validParticipants = [];
+         /* info about this trial */
 
-   mturk.forEach(function(user) {
+         "trialNumber": trial.number,
+         "targetOption": trial.targetOption,
 
-      // filter out people who did not complete the experiment
-      if (!user.tutorial || !user.trials) {
-         console.log("Failure: user", user.info.worker_id, "did not complete the experiment.")
-         return;
-      }
-      if (Object.keys(user.trials).length < 10) {
-         console.log("Failure: user", user.info.worker_id, "completed only", Object.keys(user.trials).length, "trials")
-         return;
-      }
+         /* outcome */
 
-      // check for duplicate
-      if (validParticipants.indexOf(user.info.worker_id) > 0) {
-         console.log("Failure: user", user.info.worker_id, "participated more than once")
-         return;
-      }
+         "success": trial.success,
+         "timeout": trial.timeout,
 
-      console.log("Success! user", user.info.worker_id, "completed the experiment successfully")
-      validParticipants.push(user.info.worker_id);
+         /* durations */
+         "instructions": trial.duration.instructions,
+         "short": trial.duration.short,
+         "long": trial.duration.long,
+         "selection": trial.duration.selection,
+         "selectBetween": trial.duration.selectBetween
 
-      // log the duration of each trial
-      user.trials.forEach(function(trial) {
-         stream.writeTrialLine(user, trial, [trial.duration.short, trial.duration.long, trial.success])
       })
    });
-
-   console.log(validParticipants.length, "valid participants");
-
-   stream.end();
-   console.log("output written in: ", outputFilepath)
 });
+
+// sort by condition then participant then trialNumber, to make it easier to read
+exports.output.sort(function(workerDataA, workerDataB) {
+
+   if (workerDataA.interface == workerDataB.interface) {
+      if (workerDataA.worker_id == workerDataB.worker_id) {
+         return workerDataA.trialNumber - workerDataB.trialNumber;
+      }
+      return helpers.compareAlphaNum(workerDataA.worker_id, workerDataB.worker_id);
+   }
+   return workerDataA.interface - workerDataB.interface;
+})
