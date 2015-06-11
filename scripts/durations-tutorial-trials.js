@@ -26,7 +26,7 @@ stream.writeUserLine = function(user, array) {
    stream.writeCsvLine(info.concat(array))
 }
 stream.writeUserHeaders = function(array) {
-   var info = ["workerId", "interface", "oppositeDefaults"]
+   var info = ["worker_id", "interface", "oppositeDefaults"]
    stream.writeCsvLine(info.concat(array))
 }
 

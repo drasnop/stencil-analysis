@@ -10,7 +10,7 @@ input.forEach(function(worker) {
    exports.output.push({
 
       // general information about this worker
-      "workerId": worker.info.worker_id,
+      "worker_id": worker.info.worker_id,
       "assignmentId": worker.info.assignment_id,
       "defaults": worker.condition.oppositeDefaults ? "opposite" : "",
       "interface": worker.condition.interface,
