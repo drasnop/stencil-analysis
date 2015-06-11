@@ -124,6 +124,9 @@ exports.uniqueDuplicateParticipants = function() {
 }
 
 
+/* methods for writing output csv files */
+
+
 // convert array of JSON objects into a multi-line csv representation
 function JSONtoCSV(data) {
 
@@ -154,16 +157,26 @@ function ArrayToCSV(data) {
 // write an entire csv file at once, from a JSON object
 exports.writeJSONtoCSVfile = function(filename, data) {
    var csv = JSONtoCSV(data);
+   writeFile(filename, csv);
+}
 
-   fs.writeFile(filename, csv, function(err) {
+// write some content in a file, creating directories if needed
+function writeFile(filename, content) {
+   /*   var mkdirp = require("mkdirp")
+      var getDirName = require("path").dirname
+
+      mkdirp(getDirName(filename), function(err) {
+         if (err)
+            return console.log(err);*/
+
+   fs.writeFile(filename, content, function(err) {
       if (err) {
          return console.log(err);
       }
       console.log("output written in: ", filename);
-   })
+   });
+   //})
 }
-
-
 
 
 /* add useful methods to all objects */
