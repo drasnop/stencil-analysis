@@ -32,6 +32,9 @@ input.forEach(function(worker) {
 
       // "valid" if worker completed the experiment, but did not attempt to complete it multiple times
       "valid": helpers.isValid(worker) ? "valid" : "",
+
+      // bonus for that worker, if any
+      "payment": getPayment(worker)
    })
 
    // assuming participants couldn't complete questionnaires not in the right order: recognition, preference, demographics
@@ -44,6 +47,27 @@ input.forEach(function(worker) {
          return "preference";
       if (worker.questionnaires.recognition)
          return "recognition";
+   }
+
+   function getPayment(worker) {
+      if (!helpers.isComplete(worker))
+         return "";
+
+      return basePayment + getBonus(worker);
+   }
+
+   function getBonus(worker) {
+
+      var bonus = 0
+
+      bonus += bonusPerTrial * Object.keys(worker.trials.filter(function(trial) {
+         return trial.success;
+      })).length;
+
+      bonus += Math.max(0, (2 * worker.questionnaires.recognition.tabs.score - 10) * bonusPerTab);
+      bonus += Math.max(0, (2 * worker.questionnaires.recognition.options.score - 20) * bonusPerOption);
+
+      return bonus;
    }
 });
 

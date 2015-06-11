@@ -4,6 +4,10 @@
 // parameters
 batch = "0-12";
 var inputFilepath = "mturk/" + batch + ".json"
+basePayment = 1;
+bonusPerTrial = 0.15;
+bonusPerTab = 0.03;
+bonusPerOption = 0.03;
 
 // load helper functions and dependencies
 fs = require("fs");
