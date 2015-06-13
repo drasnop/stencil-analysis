@@ -9,7 +9,7 @@ helpers.validParticipants().forEach(function(participant) {
 
    exports.output.push({
 
-      "worker_id": participant.info.worker_id,
+      "id": participant.id,
 
       /* demographics */
 

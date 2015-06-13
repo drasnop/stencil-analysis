@@ -11,8 +11,9 @@ helpers.validParticipants().forEach(function(participant) {
 
       exports.output.push({
 
-         // general information about this participant
-         "worker_id": participant.info.worker_id,
+         /* general information about this participant */
+
+         "id": participant.id,
          "defaults": participant.condition.oppositeDefaults ? "opposite" : "",
          "interface": participant.condition.interface,
 

@@ -42,6 +42,9 @@ input.forEach(function(worker) {
       // "valid" if worker completed the experiment, but did not attempt to complete it multiple times
       "valid": helpers.isValid(worker) ? "valid" : "",
 
+      // time it took participants to reach the final page, in minutes
+      "duration": worker.instructions ? getTotalDuration(worker) : "",
+
       // bonus for that worker, if any
       "payment": getPayment(worker)
    })
@@ -66,7 +69,6 @@ input.forEach(function(worker) {
    }
 
    function getBonus(worker) {
-
       var bonus = 0
 
       bonus += bonusPerTrial * Object.keys(worker.trials.filter(function(trial) {
@@ -85,6 +87,14 @@ input.forEach(function(worker) {
          max = Math.max(max, page.page)
       });
       return max;
+   }
+
+   function getTotalDuration(worker) {
+      var duration = 0;
+      worker.instructions.forEach(function(page) {
+         duration += page.duration;
+      });
+      return duration / 60;
    }
 });
 
