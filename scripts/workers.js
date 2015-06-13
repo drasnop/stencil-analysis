@@ -8,12 +8,18 @@ exports.output = [];
 input.forEach(function(worker) {
 
    exports.output.push({
-
       // general information about this worker
+      "id": worker.id,
+      "timestamp": worker.info.timestamp,
       "worker_id": worker.info.worker_id,
       "assignmentId": worker.info.assignment_id,
+      "OS": worker.info.apparatus ? worker.info.apparatus.os : "",
+      "browser": worker.info.apparatus ? worker.info.apparatus.browser : "",
       "defaults": worker.condition.oppositeDefaults ? "opposite" : "",
       "interface": worker.condition.interface,
+
+      // latest instructions page reached
+      "instructions": worker.instructions ? getLastInstructionsPage(worker) : "",
 
       // # of tutorial steps completed, if any
       "tutorial": worker.tutorial ? Object.keys(worker.tutorial).length : "",
@@ -26,6 +32,9 @@ input.forEach(function(worker) {
 
       // "duplicate" if worker participated more than once
       "duplicate": helpers.isDuplicate(worker) ? "duplicate" : "",
+
+      // "bad" if worker completed the experiment more than once
+      "bad": helpers.isBadDuplicate(worker) ? "bad" : "",
 
       // "complete" if the entire experiment was completed
       "complete": helpers.isComplete(worker) ? "complete" : "",
@@ -69,8 +78,20 @@ input.forEach(function(worker) {
 
       return bonus;
    }
+
+   function getLastInstructionsPage(worker) {
+      var max = 0;
+      worker.instructions.forEach(function(page) {
+         max = Math.max(max, page.page)
+      });
+      return max;
+   }
 });
 
+// sort chronologically
+exports.output.sort(function(workerA, workerB) {
+   return workerA.timestamp - workerB.timestamp;
+})
 
 // print some summary statistics to the console
 console.log()

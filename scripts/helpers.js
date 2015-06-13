@@ -234,3 +234,18 @@ Object.defineProperty(Object.prototype, "map", {
       return mapped;
    }
 })
+
+exports.convertOldPilotData = function() {
+   for (var id in input) {
+
+      // batch 0-12
+      if (!input[id].id) {
+
+         // add id
+         input[id].id = id;
+
+         // add fake timestamp
+         input[id].info.timestamp = 0;
+      }
+   }
+}
