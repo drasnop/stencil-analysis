@@ -21,6 +21,9 @@ helpers.validParticipants().forEach(function(participant) {
 
          "trialNumber": trial.number,
          "targetOption": trial.targetOption,
+         "targetTab": participant.options[trial.targetOption].tab.name,
+         "numVisitedTabs": trial.visitedTabs ? trial.visitedTabs.length : 0,
+         "correctHookHasBeenSelected": trial.correctHookHasBeenSelected,
 
          /* outcome */
 
@@ -28,10 +31,10 @@ helpers.validParticipants().forEach(function(participant) {
          "timeout": trial.timeout,
 
          /* durations */
-         "instructions": trial.duration.instructions,
-         "short": trial.duration.short,
-         "long": trial.duration.long,
-         "selection": trial.duration.selection,
+         "instructionsDuration": trial.duration.instructions,
+         "shortDuration": trial.duration.short,
+         "longDuration": trial.duration.long,
+         "selectionDuration": trial.duration.selection,
          "selectBetween": trial.duration.selectBetween
 
       })
