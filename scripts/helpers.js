@@ -235,6 +235,17 @@ Object.defineProperty(Object.prototype, "map", {
    }
 })
 
+Object.defineProperty(Object.prototype, "reduce", {
+   // compute(previousValue, currentValue)
+   value: function(compute, initialValue) {
+      var result = initialValue;
+      Object.keys(this).forEach(function(key) {
+         result = compute(result, this[key]);
+      }, this)
+      return result;
+   }
+})
+
 exports.convertOldPilotData = function() {
    for (var id in input) {
 

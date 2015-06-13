@@ -82,19 +82,21 @@ input.forEach(function(worker) {
    }
 
    function getLastInstructionsPage(worker) {
-      var max = 0;
-      worker.instructions.forEach(function(page) {
-         max = Math.max(max, page.page)
-      });
-      return max;
+      return worker.instructions.reduce(function(max, page) {
+         return Math.max(max, page.page)
+      }, 0);
    }
 
    function getTotalDuration(worker) {
-      var duration = 0;
-      worker.instructions.forEach(function(page) {
-         duration += page.duration;
-      });
-      return duration / 60;
+      // compute duration in seconds
+      var duration = worker.instructions.reduce(function(duration, page) {
+         return duration + page.duration;
+      }, 0)
+
+      // return duration formatted as minutes.seconds
+      var minutes = Math.floor(duration / 60);
+      var seconds = Math.floor(duration) % 60;
+      return minutes + seconds / 100;
    }
 });
 
