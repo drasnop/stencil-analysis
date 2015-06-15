@@ -202,6 +202,26 @@ exports.compareAlphaNum = function(a, b) {
    }
 }
 
+// computes the median of an array of values
+Math.median = function(values) {
+   values.sort(function(a, b) {
+      return a - b;
+   });
+
+   var half = Math.floor(values.length / 2);
+
+   if (values.length % 2)
+      return values[half];
+   else
+      return (values[half - 1] + values[half]) / 2.0;
+}
+
+// computes the average of an array of values
+Math.average = function(values) {
+   return values.reduce(function(previousValue, currentValue) {
+      return previousValue + currentValue;
+   }, 0) / values.length;
+}
 
 /* add useful methods to all objects */
 

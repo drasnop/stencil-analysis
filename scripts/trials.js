@@ -45,10 +45,10 @@ helpers.validParticipants().forEach(function(participant) {
 exports.output.sort(function(workerDataA, workerDataB) {
 
    if (workerDataA.interface == workerDataB.interface) {
-      if (workerDataA.worker_id == workerDataB.worker_id) {
+      if (workerDataA.id == workerDataB.id) {
          return workerDataA.trialNumber - workerDataB.trialNumber;
       }
-      return helpers.compareAlphaNum(workerDataA.worker_id, workerDataB.worker_id);
+      return helpers.compareAlphaNum(workerDataA.id, workerDataB.id);
    }
    return workerDataA.interface - workerDataB.interface;
 })

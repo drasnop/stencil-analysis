@@ -29,3 +29,6 @@ helpers.writeJSONtoCSVfile(questionnairesParticipants.filename, questionnairesPa
 
 var trials = require("./trials.js");
 helpers.writeJSONtoCSVfile(trials.filename, trials.output)
+
+var durationsParticipants = require("./durations-participants.js");
+helpers.writeJSONtoCSVfile(durationsParticipants.filename, durationsParticipants.output)
