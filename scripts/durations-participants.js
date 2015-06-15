@@ -17,22 +17,19 @@ helpers.validParticipants().forEach(function(participant) {
 
    var instructionsDurations = [];
    var shortDurations = [];
+   var logShortDurations = [];
    var longDurations = [];
 
    participant.trials.forEach(function(trial) {
       if (trial.number >= minTrialNumber && (trial.success || !onlySuccess)) {
          instructionsDurations.push(trial.duration.instructions);
          shortDurations.push(trial.duration.short);
+         logShortDurations.push(Math.log(trial.duration.short));
          longDurations.push(trial.duration.long);
       }
    });
 
    var centralTendency = useMedian ? Math.median : Math.average;
-
-   console.log(shortDurations.sort(function(a, b) {
-      return a - b;
-   }))
-   console.log(centralTendency(shortDurations))
 
    exports.output.push({
 
@@ -47,8 +44,13 @@ helpers.validParticipants().forEach(function(participant) {
 
       "instructionsDuration": centralTendency(instructionsDurations),
       "shortDuration": centralTendency(shortDurations),
-      "longDuration": centralTendency(longDurations)
+      "logShortDuration": Math.exp(centralTendency(logShortDurations)),
+      "longDuration": centralTendency(longDurations),
+
+      "averageShortDuration": Math.average(shortDurations),
+      "averageLogShortDuration": Math.exp(Math.average(logShortDurations)),
    })
+
 });
 
 // add Pax's pilot data
@@ -61,10 +63,11 @@ exports.output.push({
    "interface": 3,
    "interfaceType": "customizationMode",
 
-   /* durations */
+   /* durations, using medians */
 
    "instructionsDuration": 5,
    "shortDuration": 15.04571216,
+   "logShortDuration": 15.5544511,
    "longDuration": 16.88699629
 })
 

@@ -1,6 +1,6 @@
 // > node scripts/participant-durations.js
-var inputFilepath = 'pilots/antoine-pilot0.json';
-var outputFilepath = 'durations/antoine-durations0.csv';
+var inputFilepath = 'pilots/kamyar-pilot.json';
+var outputFilepath = 'pilots/durations/kamyar-durations.csv';
 var fs = require('fs');
 
 Object.defineProperty(Object.prototype, "forEach", {
