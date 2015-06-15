@@ -51,6 +51,24 @@ helpers.validParticipants().forEach(function(participant) {
    })
 });
 
+// add Pax's pilot data
+exports.output.push({
+
+   /* general information about this participant */
+
+   "id": "pax",
+   "defaults": "",
+   "interface": 3,
+   "interfaceType": "customizationMode",
+
+   /* durations */
+
+   "instructionsDuration": 5,
+   "shortDuration": 15.04571216,
+   "longDuration": 16.88699629
+})
+
+
 // sort by condition then participant, to make it easier to read
 exports.output.sort(function(workerDataA, workerDataB) {
 
