@@ -92,3 +92,16 @@ exports.output.sort(function(workerDataA, workerDataB) {
    else
       return workerDataA.interface - workerDataB.interface;
 })
+
+
+// print some summary statistics to the console
+console.log(exports.output.length + " participants")
+for (var i = 0; i <= 3; i++) {
+   var count = exports.output.filter(filterByInterface).length;
+   console.log("interface " + i + ": " + count + " participants")
+}
+console.log()
+
+function filterByInterface(participant) {
+   return participant.interface === i;
+}
