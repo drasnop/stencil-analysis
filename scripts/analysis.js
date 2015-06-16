@@ -20,9 +20,11 @@ console.log("Results file parsed: ", inputFilepath)
 // add additional info to the first batch, if needed
 helpers.convertOldPilotData();
 
-// write summary of all the workers in this batch
 var workers = require("./workers.js");
 helpers.writeJSONtoCSVfile(workers.filename, workers.output)
+
+var bonuses = require("./bonuses.js");
+helpers.writeJSONtoCSVfile(bonuses.filename, bonuses.output)
 
 var questionnairesParticipants = require("./questionnaires-participants.js");
 helpers.writeJSONtoCSVfile(questionnairesParticipants.filename, questionnairesParticipants.output)

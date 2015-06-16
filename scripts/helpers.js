@@ -124,6 +124,23 @@ exports.uniqueDuplicateParticipants = function() {
 }
 
 
+exports.getPayment = function(worker) {
+   return basePayment + exports.getBonus(worker);
+}
+
+exports.getBonus = function(worker) {
+   var bonus = 0
+
+   bonus += bonusPerTrial * Object.keys(worker.trials.filter(function(trial) {
+      return trial.success;
+   })).length;
+
+   bonus += Math.max(0, (2 * worker.questionnaires.recognition.tabs.score - 10) * bonusPerTab);
+   bonus += Math.max(0, (2 * worker.questionnaires.recognition.options.score - 20) * bonusPerOption);
+
+   return bonus;
+}
+
 /* methods for writing output csv files */
 
 

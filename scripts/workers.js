@@ -12,7 +12,7 @@ input.forEach(function(worker) {
       "id": worker.id,
       "timestamp": worker.info.timestamp,
       "worker_id": worker.info.worker_id,
-      "assignmentId": worker.info.assignment_id,
+      "assignment_id": worker.info.assignment_id,
       "OS": worker.info.apparatus ? worker.info.apparatus.os : "",
       "browser": worker.info.apparatus ? worker.info.apparatus.browser : "",
       "defaults": worker.condition.oppositeDefaults ? "opposite" : "",
@@ -45,8 +45,8 @@ input.forEach(function(worker) {
       // time it took participants to reach the final page, in minutes
       "duration": worker.instructions ? getTotalDuration(worker) : "",
 
-      // bonus for that worker, if any
-      "payment": getPayment(worker)
+      // base rate + bonus for that worker, if any
+      "payment": helpers.isComplete(worker) ? helpers.getPayment(worker) : ""
    })
 
    // assuming participants couldn't complete questionnaires not in the right order: recognition, preference, demographics
