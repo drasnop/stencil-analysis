@@ -14,7 +14,7 @@ var useMedian = true;
 exports.output = [];
 helpers.validParticipants().forEach(function(participant) {
 
-   /* get ready to compute the average or the median of durations for each participant */
+   /* get ready to compute the average or the median of durations for each trial of each participant */
 
    var instructionsDurations = [];
    var shortDurations = [];
@@ -43,6 +43,8 @@ helpers.validParticipants().forEach(function(participant) {
 
       /* durations */
 
+      "tutorialDuration": computeAverageTutorialDuration(participant),
+
       "instructionsDuration": centralTendency(instructionsDurations),
       "shortDuration": centralTendency(shortDurations),
       "logShortDuration": Math.exp(centralTendency(logShortDurations)),
@@ -51,6 +53,15 @@ helpers.validParticipants().forEach(function(participant) {
       "averageShortDuration": Math.average(shortDurations),
       "averageLogShortDuration": Math.exp(Math.average(logShortDurations)),
    })
+
+
+   function computeAverageTutorialDuration(participant) {
+      var tutorialSteps = [];
+      participant.tutorial.forEach(function(step) {
+         tutorialSteps.push(step.duration);
+      });
+      return centralTendency(tutorialSteps);
+   }
 
 });
 
