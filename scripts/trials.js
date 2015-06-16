@@ -23,12 +23,12 @@ helpers.validParticipants().forEach(function(participant) {
          "targetOption": trial.targetOption,
          "targetTab": participant.options[trial.targetOption].tab.name,
          "numVisitedTabs": trial.visitedTabs ? trial.visitedTabs.length : 0,
-         "correctHookHasBeenSelected": trial.correctHookHasBeenSelected,
+         "correctHookHasBeenSelected": trial.correctHookHasBeenSelected ? 1 : 0,
 
          /* outcome */
 
-         "success": trial.success,
-         "timeout": trial.timeout,
+         "success": trial.success ? 1 : 0,
+         "timeout": trial.timeout ? 1 : 0,
 
          /* durations */
          "instructionsDuration": trial.duration.instructions,

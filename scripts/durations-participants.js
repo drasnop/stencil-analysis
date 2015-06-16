@@ -7,6 +7,7 @@ exports.filename = helpers.filename("durations-participants");
 var minTrialNumber = 2;
 var onlySuccess = true;
 var useMedian = true;
+// ? exclude above 50 seconds ?
 
 
 // parse data
