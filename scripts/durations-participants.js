@@ -52,6 +52,11 @@ helpers.validParticipants().forEach(function(participant) {
 
       "averageShortDuration": Math.average(shortDurations),
       "averageLogShortDuration": Math.exp(Math.average(logShortDurations)),
+
+      /* accuracy */
+
+      "numSuccesses": getNumSuccesses(participant),
+      "numErrors": 10 - getNumSuccesses(participant)
    })
 
 
@@ -61,6 +66,12 @@ helpers.validParticipants().forEach(function(participant) {
          tutorialSteps.push(step.duration);
       });
       return centralTendency(tutorialSteps);
+   }
+
+   function getNumSuccesses(participant) {
+      return Object.keys(participant.trials.filter(function(trial) {
+         return trial.success;
+      })).length;
    }
 
 });
@@ -77,10 +88,20 @@ exports.output.push({
 
    /* durations, using medians */
 
+   "tutorialDuration": 10,
+
    "instructionsDuration": 5,
    "shortDuration": 15.04571216,
    "logShortDuration": 15.5544511,
-   "longDuration": 16.88699629
+   "longDuration": 16.88699629,
+
+   "averageShortDuration": 15,
+   "averageLogShortDuration": 15,
+
+   /* accuracy */
+
+   "numSuccesses": 10,
+   "numErrors": 0
 })
 
 
