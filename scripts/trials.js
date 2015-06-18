@@ -24,6 +24,8 @@ helpers.validParticipants().forEach(function(participant) {
          "targetTab": participant.options[trial.targetOption].tab.name,
          "numVisitedTabs": trial.visitedTabs ? trial.visitedTabs.length : 0,
          "correctHookHasBeenSelected": trial.correctHookHasBeenSelected ? 1 : 0,
+         "numPanelExpanded": numPanelExpanded(trial),
+         "panelWasExpanded": panelWasExpanded(trial) ? 1 : 0,
 
          /* outcome */
 
@@ -36,10 +38,33 @@ helpers.validParticipants().forEach(function(participant) {
          "longDuration": trial.duration.long,
          "selectionDuration": trial.duration.selection,
          "selectBetween": trial.duration.selectBetween
-
       })
    });
 });
+
+
+function numPanelExpanded(trial) {
+   if (!trial.panel)
+      return 0;
+
+   return trial.panel.filter(function(event) {
+      return event.action == "expanded";
+   }).length;
+}
+
+function panelWasExpanded(trial) {
+   if (!trial.changedOptions)
+      return 0;
+
+   if (trial.success) {
+      for (var i in trial.changedOptions) {
+         if (trial.changedOptions[i].correct && trial.changedOptions[i].firstTime)
+            return trial.changedOptions[i].panelExpanded;
+      }
+   } else {
+      return trial.changedOptions[trial.changedOptions.length - 1].panelExpanded;
+   }
+}
 
 // sort by condition then participant then trialNumber, to make it easier to read
 exports.output.sort(function(workerDataA, workerDataB) {
