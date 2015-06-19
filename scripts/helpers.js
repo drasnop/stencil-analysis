@@ -17,7 +17,7 @@ exports.isComplete = function(worker) {
       return false;
 
    // filter out people who did not complete the experiment
-   if (!worker.trials || Object.keys(worker.trials).length < 10)
+   if (!worker.trials || worker.trials.length < 10)
       return false;
 
    // filter out people who did not complete all the questionnaires
@@ -131,9 +131,9 @@ exports.getPayment = function(worker) {
 exports.getBonus = function(worker) {
    var bonus = 0
 
-   bonus += bonusPerTrial * Object.keys(worker.trials.filter(function(trial) {
+   bonus += bonusPerTrial * worker.trials.filter(function(trial) {
       return trial.success;
-   })).length;
+   }).length;
 
    bonus += Math.max(0, (2 * worker.questionnaires.recognition.tabs.score - 10) * bonusPerTab);
    bonus += Math.max(0, (2 * worker.questionnaires.recognition.options.score - 20) * bonusPerOption);
@@ -326,10 +326,20 @@ exports.convertBatch112Data = function() {
 
 exports.betterFormatData = function() {
    // put trials in an array, instead of using unique identifiers as in Firebase
+   // NB we can't do this for trials, since the same step might have been repeated multiple times
    input.forEach(function(worker) {
       if (!worker.trials)
          return;
 
+      // check that there are no unexpected keys/trials
+      var index = 0;
+      Object.keys(worker.trials).sort().forEach(function(key) {
+         if (worker.trials[key].number !== index)
+            console.log("Error! trial " + worker.trials[key].number + " of worker " + worker.id + " is not equal to " + index)
+         index++;
+      });
+
+      // map trials to an array index from 0 to n-1
       worker.trials = Object.keys(worker.trials).map(function(key) {
          return worker.trials[key];
       });

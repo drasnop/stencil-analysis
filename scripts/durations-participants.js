@@ -70,9 +70,9 @@ helpers.validParticipants().forEach(function(participant) {
    }
 
    function getNumSuccesses(participant) {
-      return Object.keys(participant.trials.filter(function(trial) {
+      return participant.trials.filter(function(trial) {
          return trial.success;
-      })).length;
+      }).length;
    }
 
 });

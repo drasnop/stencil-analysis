@@ -76,11 +76,9 @@ function numUniqueHooksSelected(trial) {
    if (!trial.selectedHooks)
       return 0;
 
-   var uniqueHooks = {};
-   trial.selectedHooks.forEach(function(hook) {
-      uniqueHooks[hook.selector] = true;
-   });
-   return Object.keys(uniqueHooks).length;
+   return helpers.unique(trial.selectedHooks.map(function(hook) {
+      return hook.selector;
+   })).length;
 }
 
 // % of hooks selected in this trial that were selected in the previous trial

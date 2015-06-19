@@ -25,7 +25,7 @@ input.forEach(function(worker) {
       "tutorial": worker.tutorial ? Object.keys(worker.tutorial).length : "",
 
       // # of experiment trials completed, if any
-      "trials": worker.trials ? Object.keys(worker.trials).length : "",
+      "trials": worker.trials ? worker.trials.length : "",
 
 
       // "recognition", "preference", "all"
@@ -75,9 +75,9 @@ input.forEach(function(worker) {
    function getBonus(worker) {
       var bonus = 0
 
-      bonus += bonusPerTrial * Object.keys(worker.trials.filter(function(trial) {
+      bonus += bonusPerTrial * worker.trials.filter(function(trial) {
          return trial.success;
-      })).length;
+      }).length;
 
       bonus += Math.max(0, (2 * worker.questionnaires.recognition.tabs.score - 10) * bonusPerTab);
       bonus += Math.max(0, (2 * worker.questionnaires.recognition.options.score - 20) * bonusPerOption);
