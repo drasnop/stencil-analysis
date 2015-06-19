@@ -1,7 +1,7 @@
-/* compile duration data for each participant, to be used in ANOVA */
+/* compile data for each participant, to be used in ANOVA */
 
 // generate filename
-exports.filename = helpers.filename("durations-participants");
+exports.filename = helpers.filename("aggregate");
 
 // filter data
 var minTrialNumber = 2;
