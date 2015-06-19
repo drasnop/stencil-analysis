@@ -2,7 +2,7 @@
 /* Each parsing script must expose a filename and an output array */
 
 // parameters
-batch = "1-20";
+batch = "1-20-pax";
 var inputFilepath = "mturk/" + batch + ".json"
 basePayment = 1;
 bonusPerTrial = 0.15;

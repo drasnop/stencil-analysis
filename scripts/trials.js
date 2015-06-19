@@ -16,6 +16,7 @@ helpers.validParticipants().forEach(function(participant) {
          "id": participant.id,
          "defaults": participant.condition.oppositeDefaults ? "opposite" : "",
          "interface": participant.condition.interface,
+         "interfaceType": participant.condition.interface > 0 ? "customizationMode" : "settingsPanel",
 
          /* info about this trial */
 

@@ -5,8 +5,9 @@ exports.filename = helpers.filename("durations-participants");
 
 // filter data
 var minTrialNumber = 2;
-var onlySuccess = true;
-var useMedian = true;
+var onlySuccess = false;
+var onlyCHS = false;
+var useMedian = false;
 // ? exclude above 50 seconds ?
 
 
@@ -22,7 +23,7 @@ helpers.validParticipants().forEach(function(participant) {
    var longDurations = [];
 
    participant.trials.forEach(function(trial) {
-      if (trial.number >= minTrialNumber && (trial.success || !onlySuccess)) {
+      if (trial.number >= minTrialNumber && (!onlySuccess || trial.success) && (!onlyCHS || trial.correctHookHasBeenSelected || participant.condition.interface === 0)) {
          instructionsDurations.push(trial.duration.instructions);
          shortDurations.push(trial.duration.short);
          logShortDurations.push(Math.log(trial.duration.short));
@@ -75,34 +76,6 @@ helpers.validParticipants().forEach(function(participant) {
    }
 
 });
-
-// add Pax's pilot data
-exports.output.push({
-
-   /* general information about this participant */
-
-   "id": "pax",
-   "defaults": "",
-   "interface": 3,
-   "interfaceType": "customizationMode",
-
-   /* durations, using medians */
-
-   "tutorialDuration": 10,
-
-   "instructionsDuration": 5,
-   "shortDuration": 15.04571216,
-   "logShortDuration": 15.5544511,
-   "longDuration": 16.88699629,
-
-   "averageShortDuration": 15,
-   "averageLogShortDuration": 15,
-
-   /* accuracy */
-
-   "numSuccesses": 10,
-   "numErrors": 0
-})
 
 
 // sort by condition then participant, to make it easier to read
