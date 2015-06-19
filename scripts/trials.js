@@ -103,7 +103,6 @@ function numSameHooksSelected(participant, trial) {
    var currSelectors = helpers.unique(trial.selectedHooks.map(function(hook) {
       return hook.selector;
    }));
-   console.log(currSelectors.length)
 
    // find how many selected hooks from this trial appear in the previous trial
    var count = currSelectors.filter(function(selector) {

@@ -15,7 +15,9 @@ Object.defineProperty(Object.prototype, "forEach", {
 var users = JSON.parse(fs.readFileSync(inputFilepath, 'utf8'));
 console.log("Results file parsed: ", inputFilepath)
 
-users.pax.trials.forEach(function(trial) {
+var pax = users.pax;
+
+pax.trials.forEach(function(trial) {
    trial.duration = {
       "instructions": trial.instructionsDuration,
       "short": trial.shortDuration,
@@ -33,6 +35,10 @@ users.pax.trials.forEach(function(trial) {
    trial.targetOption = trial.targetOption.id;
 })
 
+
+for (var i = 0; i < pax.sequences.optionsSequence.length; i++) {
+   pax.sequences.optionsSequence[i] = pax.sequences.optionsSequence[i].id;
+}
 
 // write JSON to file
 fs.writeFile(outputFilepath, JSON.stringify(users, null, 2), function(err) {
