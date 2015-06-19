@@ -29,7 +29,8 @@ helpers.validParticipants().forEach(function(participant) {
          "panelWasExpanded": panelWasExpanded(trial) ? 1 : 0,
          "numSelectedHooks": trial.selectedHooks ? trial.selectedHooks.length : 0,
          "numUniqueHooksSelected": numUniqueHooksSelected(trial),
-         "sameHooksSelected": sameHooksSelected(participant, trial),
+         "sameHooksSelected": sameHooksSelected(participant, trial) ? 1 : 0,
+         "numTotalUniqueHooksSelected": numTotalUniqueHooksSelected(participant, trial),
 
          /* outcome */
 
@@ -93,7 +94,7 @@ function sameHooksSelected(participant, trial) {
 
    return previousTrial.selectedHooks.map(function(hook) {
       return hook.selector;
-   }).indexOf(trial.selectedHooks[0].selector) >= 0 ? 1 : 0;
+   }).indexOf(trial.selectedHooks[0].selector) >= 0;
 }
 
 function getTrial(participant, trialNumber) {
@@ -103,6 +104,22 @@ function getTrial(participant, trialNumber) {
    }
    return false;
 }
+
+// computes how many unique hooks were clicked during this trial and all the ones before
+function numTotalUniqueHooksSelected(participant, trial) {
+   var counts = {};
+
+   participant.trials.forEach(function(t) {
+      if (t.number <= trial.number && t.selectedHooks) {
+         t.selectedHooks.forEach(function(hook) {
+            counts[hook.selector] = counts[hook.selector] ? counts[hook.selector] + 1 : 1;
+         });
+      }
+   });
+
+   return Object.keys(counts).length;
+}
+
 
 // sort by condition then participant then trialNumber, to make it easier to read
 exports.output.sort(function(workerDataA, workerDataB) {
