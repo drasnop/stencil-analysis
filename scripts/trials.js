@@ -29,6 +29,7 @@ helpers.validParticipants().forEach(function(participant) {
          "panelWasExpanded": panelWasExpanded(trial) ? 1 : 0,
          "numSelectedHooks": trial.selectedHooks ? trial.selectedHooks.length : 0,
          "numUniqueHooksSelected": numUniqueHooksSelected(trial),
+         "sameHooksSelected": sameHooksSelected(participant, trial),
 
          /* outcome */
 
@@ -78,6 +79,29 @@ function numUniqueHooksSelected(trial) {
       uniqueHooks[hook.selector] = true;
    });
    return Object.keys(uniqueHooks).length;
+}
+
+// check if the first hook selected is the same as one selected in the previous trial
+function sameHooksSelected(participant, trial) {
+   var previousTrial = getTrial(participant, trial.number - 1);
+
+   if (trial.number === 0 || !previousTrial)
+      return 0;
+
+   if (!trial.selectedHooks || !previousTrial.selectedHooks)
+      return 0;
+
+   return previousTrial.selectedHooks.map(function(hook) {
+      return hook.selector;
+   }).indexOf(trial.selectedHooks[0].selector) >= 0 ? 1 : 0;
+}
+
+function getTrial(participant, trialNumber) {
+   for (var key in participant.trials) {
+      if (participant.trials[key].number == trialNumber)
+         return participant.trials[key];
+   }
+   return false;
 }
 
 // sort by condition then participant then trialNumber, to make it easier to read
