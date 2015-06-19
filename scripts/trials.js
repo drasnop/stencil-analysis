@@ -27,6 +27,8 @@ helpers.validParticipants().forEach(function(participant) {
          "correctHookHasBeenSelected": trial.correctHookHasBeenSelected ? 1 : 0,
          "numPanelExpanded": numPanelExpanded(trial),
          "panelWasExpanded": panelWasExpanded(trial) ? 1 : 0,
+         "numSelectedHooks": trial.selectedHooks ? trial.selectedHooks.length : 0,
+         "numUniqueHooksSelected": numUniqueHooksSelected(trial),
 
          /* outcome */
 
@@ -65,6 +67,17 @@ function panelWasExpanded(trial) {
    } else {
       return trial.changedOptions[trial.changedOptions.length - 1].panelExpanded;
    }
+}
+
+function numUniqueHooksSelected(trial) {
+   if (!trial.selectedHooks)
+      return 0;
+
+   var uniqueHooks = {};
+   trial.selectedHooks.forEach(function(hook) {
+      uniqueHooks[hook.selector] = true;
+   });
+   return Object.keys(uniqueHooks).length;
 }
 
 // sort by condition then participant then trialNumber, to make it easier to read
