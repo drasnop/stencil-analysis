@@ -27,6 +27,7 @@ input.forEach(function(worker) {
       // # of experiment trials completed, if any
       "trials": worker.trials ? Object.keys(worker.trials).length : "",
 
+
       // "recognition", "preference", "all"
       "questionnaires": latestQuestionnaireCompletedBy(worker),
 
@@ -41,6 +42,9 @@ input.forEach(function(worker) {
 
       // "valid" if worker completed the experiment, but did not attempt to complete it multiple times
       "valid": helpers.isValid(worker) ? "valid" : "",
+
+      // id of the option that worker did not complete
+      "nextOption": worker.trials && !helpers.isComplete(worker) ? worker.sequences.optionsSequence[worker.trials.length] : "",
 
       // time it took participants to reach the final page, in minutes
       "duration": worker.instructions ? getTotalDuration(worker) : "",
@@ -98,6 +102,7 @@ input.forEach(function(worker) {
       var seconds = Math.floor(duration) % 60;
       return minutes + seconds / 100;
    }
+
 });
 
 // sort chronologically
@@ -106,7 +111,7 @@ exports.output.sort(function(workerA, workerB) {
 })
 
 // print some summary statistics to the console
-console.log()
+console.log();
 console.log(Object.keys(input).length + " workers processed");
 console.log(Object.keys(helpers.duplicateParticipants()).length + " duplicate workers");
 console.log(Object.keys(helpers.uniqueDuplicateParticipants()).length + " unique duplicate participants");
@@ -114,4 +119,4 @@ console.log(Object.keys(helpers.badDuplicateParticipants()).length + " bad dupli
 console.log(Object.keys(helpers.startedTutorialButNotCompleteParticipants()).length + " workers started tutorial but did not complete experiment");
 console.log(Object.keys(helpers.completeParticipants()).length + " complete participants");
 console.log(Object.keys(helpers.validParticipants()).length + " valid participants");
-console.log()
+console.log();

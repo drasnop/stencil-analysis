@@ -19,7 +19,10 @@ input = JSON.parse(fs.readFileSync(inputFilepath, 'utf8'));
 console.log("Results file parsed: ", inputFilepath)
 
 // add additional info to the first batch, if needed
-helpers.convertOldPilotData();
+helpers.convertBatch112Data();
+
+// make some changes to the mturk json data to facilitate further processing
+helpers.betterFormatData();
 
 var workers = require("./workers.js");
 helpers.writeJSONtoCSVfile(workers.filename, workers.output)

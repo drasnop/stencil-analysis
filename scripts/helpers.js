@@ -309,7 +309,7 @@ Object.defineProperty(Object.prototype, "reduce", {
    }
 })
 
-exports.convertOldPilotData = function() {
+exports.convertBatch112Data = function() {
    for (var id in input) {
 
       // batch 0-12
@@ -322,4 +322,16 @@ exports.convertOldPilotData = function() {
          input[id].info.timestamp = 0;
       }
    }
+}
+
+exports.betterFormatData = function() {
+   // put trials in an array, instead of using unique identifiers as in Firebase
+   input.forEach(function(worker) {
+      if (!worker.trials)
+         return;
+
+      worker.trials = Object.keys(worker.trials).map(function(key) {
+         return worker.trials[key];
+      });
+   });
 }
