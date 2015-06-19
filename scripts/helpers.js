@@ -158,6 +158,15 @@ exports.getSelector = function(option_id) {
    return false;
 }
 
+// returns an array containing the unique elements of the argument
+exports.unique = function(array) {
+   var count = [];
+   array.forEach(function(key) {
+      count[key] = count[key] ? count[key] + 1 : 1;
+   })
+   return Object.keys(count);
+}
+
 /* methods for writing output csv files */
 
 

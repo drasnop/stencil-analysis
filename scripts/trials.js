@@ -29,7 +29,7 @@ helpers.validParticipants().forEach(function(participant) {
          "panelWasExpanded": panelWasExpanded(trial) ? 1 : 0,
          "numSelectedHooks": trial.selectedHooks ? trial.selectedHooks.length : 0,
          "numUniqueHooksSelected": numUniqueHooksSelected(trial),
-         "sameHooksSelected": sameHooksSelected(participant, trial) ? 1 : 0,
+         "numSameHooksSelected": numSameHooksSelected(participant, trial),
          "numTotalUniqueHooksSelected": numTotalUniqueHooksSelected(participant, trial),
          "numTrueTotalUniqueHooksSelected": numTrueTotalUniqueHooksSelected(participant, trial),
 
@@ -83,8 +83,9 @@ function numUniqueHooksSelected(trial) {
    return Object.keys(uniqueHooks).length;
 }
 
-// check if the first hook selected is the same as one selected in the previous trial
-function sameHooksSelected(participant, trial) {
+// % of hooks selected in this trial that were selected in the previous trial
+// this number will be 1 when participants select the same hook over and over again
+function numSameHooksSelected(participant, trial) {
    var previousTrial = helpers.getTrial(participant, trial.number - 1);
 
    if (trial.number === 0 || !previousTrial)
@@ -93,10 +94,25 @@ function sameHooksSelected(participant, trial) {
    if (!trial.selectedHooks || !previousTrial.selectedHooks)
       return 0;
 
-   return previousTrial.selectedHooks.map(function(hook) {
+   // compare hooks based on their (unique) selector string
+   var prevSelectors = previousTrial.selectedHooks.map(function(hook) {
       return hook.selector;
-   }).indexOf(trial.selectedHooks[0].selector) >= 0;
+   })
+
+   // of course we must consider each hook only once
+   var currSelectors = helpers.unique(trial.selectedHooks.map(function(hook) {
+      return hook.selector;
+   }));
+   console.log(currSelectors.length)
+
+   // find how many selected hooks from this trial appear in the previous trial
+   var count = currSelectors.filter(function(selector) {
+      return prevSelectors.indexOf(selector) >= 0;
+   }).length;
+
+   return count / currSelectors.length;
 }
+
 
 // computes how many unique hooks were clicked during this trial and all the ones before
 function numTotalUniqueHooksSelected(participant, trial) {
