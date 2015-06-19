@@ -12,6 +12,7 @@ bonusPerOption = 0.03;
 // load helper functions and dependencies
 fs = require("fs");
 helpers = require("./helpers.js");
+mappings = JSON.parse(fs.readFileSync("mturk/mappings_wunderlist.json", 'utf8'));
 
 // read input data
 input = JSON.parse(fs.readFileSync(inputFilepath, 'utf8'));

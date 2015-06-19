@@ -31,6 +31,7 @@ helpers.validParticipants().forEach(function(participant) {
          "numUniqueHooksSelected": numUniqueHooksSelected(trial),
          "sameHooksSelected": sameHooksSelected(participant, trial) ? 1 : 0,
          "numTotalUniqueHooksSelected": numTotalUniqueHooksSelected(participant, trial),
+         "numTrueTotalUniqueHooksSelected": numTrueTotalUniqueHooksSelected(participant, trial),
 
          /* outcome */
 
@@ -84,7 +85,7 @@ function numUniqueHooksSelected(trial) {
 
 // check if the first hook selected is the same as one selected in the previous trial
 function sameHooksSelected(participant, trial) {
-   var previousTrial = getTrial(participant, trial.number - 1);
+   var previousTrial = helpers.getTrial(participant, trial.number - 1);
 
    if (trial.number === 0 || !previousTrial)
       return 0;
@@ -97,14 +98,6 @@ function sameHooksSelected(participant, trial) {
    }).indexOf(trial.selectedHooks[0].selector) >= 0;
 }
 
-function getTrial(participant, trialNumber) {
-   for (var key in participant.trials) {
-      if (participant.trials[key].number == trialNumber)
-         return participant.trials[key];
-   }
-   return false;
-}
-
 // computes how many unique hooks were clicked during this trial and all the ones before
 function numTotalUniqueHooksSelected(participant, trial) {
    var counts = {};
@@ -114,6 +107,21 @@ function numTotalUniqueHooksSelected(participant, trial) {
          t.selectedHooks.forEach(function(hook) {
             counts[hook.selector] = counts[hook.selector] ? counts[hook.selector] + 1 : 1;
          });
+      }
+   });
+
+   return Object.keys(counts).length;
+}
+
+function numTrueTotalUniqueHooksSelected(participant, trial) {
+   var counts = {};
+   var selector;
+
+   participant.trials.forEach(function(t) {
+      if (t.number <= trial.number) {
+         selector = helpers.getSelector(t.targetOption);
+         if (selector)
+            counts[selector] = counts[selector] ? counts[selector] + 1 : 1;
       }
    });
 
