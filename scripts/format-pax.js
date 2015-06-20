@@ -33,6 +33,12 @@ pax.trials.forEach(function(trial) {
    delete trial.totalDuration;
 
    trial.targetOption = trial.targetOption.id;
+
+   trial.clickedOptions = trial.clickedOptions.map(function(option) {
+      return {
+         "option_ID": option.id
+      };
+   })
 })
 
 

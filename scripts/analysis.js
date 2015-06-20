@@ -8,6 +8,7 @@ basePayment = 1;
 bonusPerTrial = 0.15;
 bonusPerTab = 0.03;
 bonusPerOption = 0.03;
+addPax = true;
 
 /* helper functions and dependencies */
 
@@ -23,13 +24,20 @@ input = JSON.parse(fs.readFileSync(inputFilepath, 'utf8'));
 console.log("Input file parsed: ", inputFilepath)
 
 // add pax's data, to have an even number of participants
-input["pax"] = JSON.parse(fs.readFileSync("pilots/pax-pilot-reformatted.json", "utf8")).pax;
+if (addPax) {
+   var paxPilotDataPath = "pilots/pax-pilot-reformatted.json";
+   input["pax"] = JSON.parse(fs.readFileSync(paxPilotDataPath, "utf8")).pax;
+   console.log("Pax data added from ", paxPilotDataPath)
+}
 
 // add additional info to the first batch, if needed
 helpers.convertBatch112Data();
 
 // make some changes to the mturk json data to facilitate further processing
 helpers.betterFormatData();
+
+// run some tests to ensure my data collection works as expected
+helpers.checkData();
 
 
 /* output */

@@ -325,6 +325,7 @@ exports.convertBatch112Data = function() {
 }
 
 exports.betterFormatData = function() {
+
    // put trials in an array, instead of using unique identifiers as in Firebase
    // NB we can't do this for trials, since the same step might have been repeated multiple times
    input.forEach(function(worker) {
@@ -342,6 +343,36 @@ exports.betterFormatData = function() {
       // map trials to an array index from 0 to n-1
       worker.trials = Object.keys(worker.trials).map(function(key) {
          return worker.trials[key];
+      });
+   });
+}
+
+exports.checkData = function() {
+
+   // check if correctHookHasBeenSelected is logged as expected
+   helpers.validParticipants().forEach(function(participant) {
+      if (participant.condition.interface === 0)
+         return;
+
+      participant.trials.forEach(function(trial) {
+         var correctHookSelector = exports.getSelector(trial.targetOption);
+         var correctHookHasBeenSelected = false;
+
+         // check if this selector appears in the list of clicked hooks
+         if (trial.selectedHooks) {
+            trial.selectedHooks.forEach(function(hook) {
+
+               if (hook.options_IDs.indexOf(trial.targetOption) >= 0)
+                  correctHookHasBeenSelected = true;
+            });
+         }
+
+         // we eliminate the special case of pax
+         if (participant.id == "pax")
+            return;
+
+         if (correctHookHasBeenSelected !== trial.correctHookHasBeenSelected)
+            console.log("Error! correctHookHasBeenSelected is inconsistent in trial " + trial.number + " of participant " + participant.id, correctHookHasBeenSelected, trial.correctHookHasBeenSelected, trial.targetOption)
       });
    });
 }
