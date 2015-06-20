@@ -7,8 +7,7 @@ exports.filename = helpers.filename("aggregate");
 var minTrialNumber = 2;
 var onlySuccess = false;
 var onlyCHS = false;
-var useMedian = false;
-// ? exclude above 50 seconds ?
+var useMedian = true;
 
 
 // parse data
@@ -26,7 +25,7 @@ helpers.validParticipants().forEach(function(participant) {
       if (trial.number >= minTrialNumber && (!onlySuccess || trial.success) && (!onlyCHS || trial.correctHookHasBeenSelected || participant.condition.interface === 0)) {
          instructionsDurations.push(trial.duration.instructions);
          shortDurations.push(trial.duration.short);
-         logShortDurations.push(Math.log(trial.duration.short));
+         logShortDurations.push(Math.log(1 + trial.duration.short));
          longDurations.push(trial.duration.long);
       }
    });
@@ -48,11 +47,11 @@ helpers.validParticipants().forEach(function(participant) {
 
       "instructionsDuration": centralTendency(instructionsDurations),
       "shortDuration": centralTendency(shortDurations),
-      "logShortDuration": Math.exp(centralTendency(logShortDurations)),
+      "logShortDuration": Math.exp(centralTendency(logShortDurations)) - 1,
       "longDuration": centralTendency(longDurations),
 
       "averageShortDuration": Math.average(shortDurations),
-      "averageLogShortDuration": Math.exp(Math.average(logShortDurations)),
+      "averageLogShortDuration": Math.exp(Math.average(logShortDurations)) - 1,
 
       /* accuracy */
 

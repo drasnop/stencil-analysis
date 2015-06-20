@@ -41,7 +41,7 @@ helpers.validParticipants().forEach(function(participant) {
          /* durations */
          "instructionsDuration": trial.duration.instructions,
          "shortDuration": trial.duration.short,
-         "logShortDuration": Math.log(trial.duration.short),
+         "logShortDuration": Math.log(1 + trial.duration.short),
          "longDuration": trial.duration.long,
          "selectionDuration": trial.duration.selection,
          "selectBetween": trial.duration.selectBetween
