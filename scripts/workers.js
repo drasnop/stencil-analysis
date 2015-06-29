@@ -46,8 +46,14 @@ input.forEach(function(worker) {
       // id of the option that worker did not complete
       "nextOption": worker.trials && !helpers.isComplete(worker) ? worker.sequences.optionsSequence[worker.trials.length] : "",
 
+      // time it took participants to complete all steps of the tutorial
+      "tutorialDuration": worker.tutorial ? getTutorialDuration(worker) : "",
+
+      // time it took participants to complete the 10 trials of the experiment
+      "trialsDuration": worker.trials ? getTrialsDuration(worker) : "",
+
       // time it took participants to reach the final page, in minutes
-      "duration": worker.instructions ? getTotalDuration(worker) : "",
+      "totalDuration": worker.instructions ? getTotalDuration(worker) : "",
 
       // base rate + bonus for that worker, if any
       "payment": helpers.isComplete(worker) ? helpers.getPayment(worker) : ""
@@ -91,14 +97,34 @@ input.forEach(function(worker) {
       }, 0);
    }
 
+   function getTutorialDuration(worker) {
+      // compute duration in seconds
+      var duration = worker.tutorial.reduce(function(duration, step) {
+         return duration + step.duration;
+      }, 0)
+
+      // return helpers.formatMinuteSeconds(duration);
+      return duration / 60;
+   }
+
+   function getTrialsDuration(worker) {
+      // compute duration in seconds
+      var duration = worker.trials.reduce(function(duration, trial) {
+         return duration + trial.duration.total;
+      }, 0)
+
+      // return helpers.formatMinuteSeconds(duration);
+      return duration / 60;
+   }
+
    function getTotalDuration(worker) {
       // compute duration in seconds
       var duration = worker.instructions.reduce(function(duration, page) {
          return duration + page.duration;
       }, 0)
 
-      // return duration formatted as minutes.seconds
-      return helpers.formatMinuteSeconds(duration);
+      // return helpers.formatMinuteSeconds(duration);
+      return duration / 60;
    }
 
 });
