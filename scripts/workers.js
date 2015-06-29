@@ -98,9 +98,7 @@ input.forEach(function(worker) {
       }, 0)
 
       // return duration formatted as minutes.seconds
-      var minutes = Math.floor(duration / 60);
-      var seconds = Math.floor(duration) % 60;
-      return minutes + seconds / 100;
+      return helpers.formatMinuteSeconds(duration);
    }
 
 });

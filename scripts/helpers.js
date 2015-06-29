@@ -167,6 +167,14 @@ exports.unique = function(array) {
    return Object.keys(count);
 }
 
+// @input: duration in minutes (float)
+// return duration formatted as minutes.seconds
+exports.formatMinuteSeconds = function(duration) {
+   var minutes = Math.floor(duration / 60);
+   var seconds = Math.floor(duration) % 60;
+   return minutes + seconds / 100;
+}
+
 /* methods for writing output csv files */
 
 
