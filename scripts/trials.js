@@ -27,6 +27,8 @@ helpers.validParticipants().forEach(function(participant) {
          "correctHookHasBeenSelected": trial.correctHookHasBeenSelected ? 1 : 0,
          "numPanelExpanded": numPanelExpanded(trial),
          "panelWasExpanded": panelWasExpanded(trial) ? 1 : 0,
+         "numClusterExpanded": numClusterExpanded(trial),
+         "clusterWasExpanded": clusterWasExpanded(trial),
          "numSelectedHooks": trial.selectedHooks ? trial.selectedHooks.length : 0,
          "numUniqueHooksSelected": numUniqueHooksSelected(trial),
          "numSameHooksSelected": numSameHooksSelected(participant, trial),
@@ -50,6 +52,8 @@ helpers.validParticipants().forEach(function(participant) {
 });
 
 
+/* Panel */
+
 function numPanelExpanded(trial) {
    if (!trial.panel)
       return 0;
@@ -63,15 +67,35 @@ function panelWasExpanded(trial) {
    if (!trial.changedOptions)
       return 0;
 
-   if (trial.success) {
-      for (var i in trial.changedOptions) {
-         if (trial.changedOptions[i].correct && trial.changedOptions[i].firstTime)
-            return trial.changedOptions[i].panelExpanded;
-      }
-   } else {
-      return trial.changedOptions[trial.changedOptions.length - 1].panelExpanded;
-   }
+   return helpers.getMostInformativeChangedOption(trial).panelExpanded;
 }
+
+
+/* Clusters */
+
+function numClusterExpanded(trial) {
+   if (!trial.cluster)
+      return 0;
+
+   return trial.cluster.filter(function(event) {
+      return event.action == "expanded";
+   }).length;
+}
+
+// TODO for next batch: replace clusterCollapsed by clusterExpanded
+function clusterWasExpanded(trial) {
+   if (!trial.changedOptions)
+      return "";
+
+   var option = helpers.getMostInformativeChangedOption(trial);
+
+   if (!option.clusterCollapsed)
+      return "";
+
+   return option.clusterCollapsed ? 0 : 1;
+}
+
+/* Hooks */
 
 function numUniqueHooksSelected(trial) {
    if (!trial.selectedHooks)

@@ -175,6 +175,16 @@ exports.formatMinuteSeconds = function(duration) {
    return minutes + seconds / 100;
 }
 
+// return either the first correctly changed option, or the last one
+exports.getMostInformativeChangedOption = function(trial) {
+   for (var i in trial.changedOptions) {
+      if (trial.changedOptions[i].correct && trial.changedOptions[i].firstTime)
+         return trial.changedOptions[i];
+   }
+   // no success
+   return trial.changedOptions[trial.changedOptions.length - 1];
+}
+
 /* methods for writing output csv files */
 
 
