@@ -24,6 +24,7 @@ helpers.validParticipants().forEach(function(participant) {
          "targetOption": trial.targetOption,
          "targetTab": participant.options[trial.targetOption].tab.name,
          "numVisitedTabs": trial.visitedTabs ? trial.visitedTabs.length : 0,
+         "numChangedOptions": trial.changedOptions ? trial.changedOptions.length : 0,
          "correctHookHasBeenSelected": trial.correctHookHasBeenSelected ? 1 : 0,
          "numPanelExpanded": numPanelExpanded(trial),
          "panelWasExpanded": panelWasExpanded(trial) ? 1 : 0,
