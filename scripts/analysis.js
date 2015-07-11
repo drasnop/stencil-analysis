@@ -59,3 +59,6 @@ helpers.writeJSONtoCSVfile(aggregate.filename, aggregate.output)
 
 var standardErrors = require("./standard-errors.js");
 helpers.writeJSONtoCSVfile(standardErrors.filename, standardErrors.output)
+
+var standardError = require("./standard-error.js");
+helpers.writeJSONtoCSVfile(standardError.filename, standardError.output)

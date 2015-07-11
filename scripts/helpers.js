@@ -185,6 +185,20 @@ exports.getMostInformativeChangedOption = function(trial) {
    return trial.changedOptions[trial.changedOptions.length - 1];
 }
 
+// get the number of trials, and print an error if some participants don't have the same number of trials
+exports.getNumTrials = function(participants) {
+   var num = false;
+   participants.forEach(function(participant) {
+      // initialize
+      if (!num)
+         num = participant.trials.length;
+      // check if other participants have the same number of trials
+      else if (num != participant.trials.length)
+         console.log("Error! Participant " + participant.id + " has completed " + participant.trials.length + " trials instead of " + num);
+   });
+   return num;
+}
+
 /* methods for writing output csv files */
 
 
@@ -295,6 +309,7 @@ Math.ssd = function(values) {
 
 // computes the standard error of the mean of an array of values
 Math.sem = function(values) {
+   console.log(values.length)
    return Math.ssd(values) / Math.sqrt(values.length);
 }
 
