@@ -284,6 +284,16 @@ Math.average = function(values) {
    }, 0) / values.length;
 }
 
+// computes the sample standard deviation of an array of values
+Math.ssd = function(values) {
+   console.log(values.length)
+   var mean = Math.average(values);
+   var variance = values.reduce(function(previousValue, currentValue) {
+      return previousValue + (currentValue - mean) * (currentValue - mean);
+   }, 0);
+   return Math.sqrt(variance / (values.length - 1));
+}
+
 /* add useful methods to all objects */
 
 

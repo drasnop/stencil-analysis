@@ -56,3 +56,6 @@ helpers.writeJSONtoCSVfile(trials.filename, trials.output)
 
 var aggregate = require("./aggregate.js");
 helpers.writeJSONtoCSVfile(aggregate.filename, aggregate.output)
+
+var standardErrors = require("./standard-errors.js");
+helpers.writeJSONtoCSVfile(standardErrors.filename, standardErrors.output)
