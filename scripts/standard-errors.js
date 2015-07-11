@@ -33,10 +33,7 @@ helpers.validParticipants().forEach(function(participant) {
 
    /* compute standard error for increasing numbers of trials*/
    for (var i = minTrialNumber + 1; i < participant.trials.length; i++) {
-      var ssd = Math.ssd(logShortDurations.slice(minTrialNumber, i + 1));
-      out[i] = ssd / Math.sqrt(i - minTrialNumber + 1);
-      if (logShortDurations.slice(minTrialNumber, i + 1).length != i - minTrialNumber + 1)
-         console.log("problem!", i)
+      out[i] = Math.sem(logShortDurations.slice(minTrialNumber, i + 1));
    }
 
    exports.output.push(out);
