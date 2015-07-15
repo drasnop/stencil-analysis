@@ -54,6 +54,9 @@ helpers.writeJSONtoCSVfile(questionnairesParticipants.filename, questionnairesPa
 var trials = require("./trials.js");
 helpers.writeJSONtoCSVfile(trials.filename, trials.output)
 
+var tutorial = require("./tutorial.js");
+helpers.writeJSONtoCSVfile(tutorial.filename, tutorial.output)
+
 var aggregate = require("./aggregate.js");
 helpers.writeJSONtoCSVfile(aggregate.filename, aggregate.output)
 

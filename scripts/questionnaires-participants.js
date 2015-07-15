@@ -27,6 +27,9 @@ helpers.validParticipants().forEach(function(participant) {
 
       "tabsRecognitionScore": participant.questionnaires.recognition.tabs.score,
       "optionsRecognitionScore": participant.questionnaires.recognition.options.score,
+      "optionsRecognitionScoreSelected": computeScore(getSelectedOptions(participant)),
+      "optionsRecognitionScoreAdjacent": computeScore(getAdjacentOptions(participant)),
+      "optionsRecognitionScoreFake": computeScore(getFakeOptions(participant)),
 
       /* preference */
 
@@ -54,6 +57,30 @@ helpers.validParticipants().forEach(function(participant) {
       if (participant.questionnaires.additionalFeedback)
          count += participant.questionnaires.additionalFeedback.length;
       return count;
+   }
+
+   function getSelectedOptions(participant) {
+      return participant.questionnaires.recognition.options.responses.filter(function(response) {
+         return response.adjacentOption;
+      });
+   }
+
+   function getAdjacentOptions(participant) {
+      return participant.questionnaires.recognition.options.responses.filter(function(response) {
+         return response.adjacent;
+      });
+   }
+
+   function getFakeOptions(participant) {
+      return participant.questionnaires.recognition.options.responses.filter(function(response) {
+         return !response.present;
+      });
+   }
+
+   function computeScore(responses) {
+      return responses.reduce(function(score, response) {
+         return score + (response.correct ? 1 : 0);
+      }, 0)
    }
 });
 
