@@ -4,8 +4,8 @@
 // parameters
 batch = "1-20-pax";
 var inputFilepath = "mturk/1-20.json"
-basePayment = 1;
-bonusPerTrial = 0.15;
+basePayment = 2;
+bonusPerTrial = 0.05;
 bonusPerTab = 0.03;
 bonusPerOption = 0.03;
 addPax = true;

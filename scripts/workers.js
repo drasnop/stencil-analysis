@@ -82,7 +82,7 @@ input.forEach(function(worker) {
       var bonus = 0
 
       bonus += bonusPerTrial * worker.trials.filter(function(trial) {
-         return trial.success;
+         return trial.number > 0 && trial.success;
       }).length;
 
       bonus += Math.max(0, (2 * worker.questionnaires.recognition.tabs.score - 10) * bonusPerTab);

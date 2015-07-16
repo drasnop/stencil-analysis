@@ -4,8 +4,8 @@
 		{
 			"path": "/C/Users/Antoine/programmation/web/stencil-analysis",
 			"name":"stencil-analysis",
-			"folder_exclude_patterns":[
-				"git"
+			"folder_include_patterns":[
+				"scripts"
 			],
 			"file_exclude_patterns": [
 				".git*",
