@@ -2,19 +2,24 @@
 /* Each parsing script must expose a filename and an output array */
 
 // parameters
-batch = "1-20-pax";
-var inputFilepath = "mturk/1-20.json"
+batch = "2-24";
+var inputFolder = "mturk/" + batch + "/";
+var inputFilepath = inputFolder + batch + ".json";
 basePayment = 2;
 bonusPerTrial = 0.05;
 bonusPerTab = 0.03;
 bonusPerOption = 0.03;
-addPax = true;
+addPax = false;
 
 /* helper functions and dependencies */
 
 fs = require("fs");
 helpers = require("./helpers.js");
-mappings = JSON.parse(fs.readFileSync("mturk/mappings_wunderlist.json", 'utf8'));
+wunderlist = {
+   "options": JSON.parse(fs.readFileSync(inputFolder + "options_wunderlist.json", 'utf8')),
+   "tabs": JSON.parse(fs.readFileSync(inputFolder + "tabs_wunderlist.json", 'utf8')),
+   "mappings": JSON.parse(fs.readFileSync(inputFolder + "mappings_wunderlist.json", 'utf8'))
+}
 
 
 /* input */
@@ -34,7 +39,7 @@ if (addPax) {
 helpers.convertBatch112Data();
 
 // make some changes to the mturk json data to facilitate further processing
-helpers.betterFormatData();
+helpers.preprocessData();
 
 // run some tests to ensure my data collection works as expected
 helpers.checkData();

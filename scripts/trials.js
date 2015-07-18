@@ -3,6 +3,9 @@
 // generate filename
 exports.filename = helpers.filename("trials");
 
+/* It could be useful to filter out trials with a hidden hook that had to be revealed = a visible ghost */
+
+
 // parse data
 exports.output = [];
 helpers.validParticipants().forEach(function(participant) {
@@ -22,8 +25,8 @@ helpers.validParticipants().forEach(function(participant) {
 
          "trialNumber": trial.number,
          "targetOption": trial.targetOption,
-         "targetTab": participant.options[trial.targetOption].tab.name,
-         "targetIndex": participant.options[trial.targetOption].index,
+         "targetTab": wunderlist.options[trial.targetOption].tab.name,
+         "targetIndex": wunderlist.options[trial.targetOption].index,
          "numVisitedTabs": trial.visitedTabs ? trial.visitedTabs.length : 0,
          "numChangedOptions": trial.changedOptions ? trial.changedOptions.length : 0,
          "correctHookHasBeenSelected": trial.correctHookHasBeenSelected ? 1 : 0,

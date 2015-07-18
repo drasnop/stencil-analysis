@@ -151,9 +151,9 @@ exports.getTrial = function(participant, trialNumber) {
 }
 
 exports.getSelector = function(option_id) {
-   for (var i in mappings) {
-      if (mappings[i].options.indexOf(option_id) >= 0)
-         return mappings[i].selector;
+   for (var i in wunderlist.mappings) {
+      if (wunderlist.mappings[i].options.indexOf(option_id) >= 0)
+         return wunderlist.mappings[i].selector;
    }
    return false;
 }
@@ -309,7 +309,7 @@ Math.ssd = function(values) {
 
 // computes the standard error of the mean of an array of values
 Math.sem = function(values) {
-   console.log(values.length)
+   //console.log(values.length)
    return Math.ssd(values) / Math.sqrt(values.length);
 }
 
@@ -371,10 +371,43 @@ exports.convertBatch112Data = function() {
    }
 }
 
-exports.betterFormatData = function() {
+exports.preprocessData = function() {
+
+   // creates a convenient enumerating (but non-enumerable!) function
+   Object.defineProperty(wunderlist.tabs, "forEachNonBloat", {
+      value: function(callback) {
+         this.forEach(function(tab) {
+            if (!tab.bloat)
+               callback(tab);
+         })
+      }
+   })
+
+   // replace tab.option_ids by pointers to actual options
+   wunderlist.tabs.forEachNonBloat(function(tab) {
+      var tabOptions = tab.options.map(function(option_id) {
+         return wunderlist.options[option_id];
+      })
+      tab.options = tabOptions;
+   })
+
+   // add pointer to tab (and index in that tab) to options
+   wunderlist.tabs.forEachNonBloat(function(tab) {
+      for (var i = 0; i < tab.options.length; i++) {
+         tab.options[i].tab = tab;
+         // the display code only uses filteredIndex (not the real .index), but this could be useful in the analysis
+         tab.options[i].index = i;
+      }
+   })
+
+   // add tab index information for future sorting
+   for (var i = 0, len = wunderlist.tabs.length; i < len; i++) {
+      wunderlist.tabs[i].index = i;
+   }
+
 
    // put trials in an array, instead of using unique identifiers as in Firebase
-   // NB we can't do this for trials, since the same step might have been repeated multiple times
+   // NB we can't do this for the tutorial, since the same step might have been repeated multiple times
    input.forEach(function(worker) {
       if (!worker.trials)
          return;

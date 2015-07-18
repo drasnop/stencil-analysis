@@ -97,7 +97,7 @@ for (var i = minTrialNumber; i < n; i++) {
 
    var index = 0;
    for (var j in participants) {
-      console.log(i, j, index)
+      //console.log(i, j, index)
       var type = participants[j].condition.interface > 0 ? "customizationMode" : "control";
       means[type][i][index] = Math.average(participants[j].trials.map(function(trial) {
          return Math.log(1 + trial.duration.short);
