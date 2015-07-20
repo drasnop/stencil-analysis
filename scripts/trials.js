@@ -17,12 +17,14 @@ helpers.validParticipants().forEach(function(participant) {
          /* general information about this participant */
 
          "id": participant.id,
+         "problems": problems[participant.id],
          "defaults": participant.condition.oppositeDefaults ? "opposite" : "",
          "interface": participant.condition.interface,
          "interfaceType": participant.condition.interface > 0 ? "customizationMode" : "control",
 
          /* info about this trial */
 
+         "block": getBlock(trial),
          "trialNumber": trial.number,
          "targetOption": trial.targetOption,
          "targetTab": wunderlist.options[trial.targetOption].tab.name,
@@ -56,6 +58,15 @@ helpers.validParticipants().forEach(function(participant) {
    });
 });
 
+
+function getBlock(trial) {
+   if (trial.number >= 21)
+      return 2;
+   if (trial.number >= 1)
+      return 1;
+   else
+      return 0;
+}
 
 /* Panel */
 

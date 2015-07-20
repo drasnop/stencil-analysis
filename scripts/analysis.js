@@ -3,7 +3,7 @@
 
 // parameters
 batch = "2-24";
-var inputFolder = "mturk/" + batch + "/";
+var inputFolder = batch + "/mturk/";
 var inputFilepath = inputFolder + batch + ".json";
 basePayment = 2;
 bonusPerTrial = 0.05;
@@ -11,6 +11,34 @@ bonusPerTab = 0.03;
 bonusPerOption = 0.03;
 totalNumTrials = 41;
 addPax = false;
+
+// 0: no problems, 1: participant experienced minor bugs, 2: participant experienced major bugs / number of errors
+problems = {
+   "mh6oa5uk": 1,
+   "zjkgjapb": 2,
+   "48oqor59": 2,
+   "ziyzp70i": 0,
+   "bw6ge9qu": 2,
+   "y2flppmw": 1,
+   "u9tfna64": 0,
+   "e3idjgam": 2,
+   "fsk2fgmq": 1,
+   "h4hgn25j": 0,
+   "phjh26hc": 1,
+   "kkve0dki": 2,
+   "295gadhc": 0,
+   "k5a0l1ni": 1,
+   "d2pbqq80": 0,
+   "zdrsiddl": 0,
+   "sgcg1k70": 0,
+   "ot5jw5nw": 0,
+   "vr8ln53q": 0,
+   "ymkonwth": 2,
+   "cvmxtfbn": 0,
+   "mppakz7p": 0,
+   "9wl1dod1": 0,
+   "0vshpky4": 0
+}
 
 /* helper functions and dependencies */
 
