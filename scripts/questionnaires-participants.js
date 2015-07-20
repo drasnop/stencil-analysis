@@ -23,6 +23,12 @@ helpers.validParticipants().forEach(function(participant) {
       "defaults": participant.condition.oppositeDefaults ? "opposite" : "",
       "interface": participant.condition.interface,
 
+      /* additional information on how they performed in the experiment */
+
+      "numTimeouts": helpers.getNumTimeouts(participant),
+      "numSuccesses": helpers.getNumSuccesses(participant),
+      "numErrors": totalNumTrials - helpers.getNumSuccesses(participant),
+
       /* recognition */
 
       "tabsRecognitionScore": participant.questionnaires.recognition.tabs.score,

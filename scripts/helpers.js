@@ -199,6 +199,18 @@ exports.getNumTrials = function(participants) {
    return num;
 }
 
+exports.getNumTimeouts = function(participant) {
+   return participant.trials.filter(function(trial) {
+      return trial.timeout;
+   }).length;
+}
+
+exports.getNumSuccesses = function(participant) {
+   return participant.trials.filter(function(trial) {
+      return trial.success;
+   }).length;
+}
+
 /* methods for writing output csv files */
 
 
@@ -423,6 +435,16 @@ exports.preprocessData = function() {
       // map trials to an array index from 0 to n-1
       worker.trials = Object.keys(worker.trials).map(function(key) {
          return worker.trials[key];
+      });
+   });
+
+   // there was one case of a negative (??) short duration
+   helpers.validParticipants().forEach(function(participant) {
+      participant.trials.forEach(function(trial) {
+         if (trial.duration.short < 0) {
+            console.log("Error! trial " + trial.number + " of participant " + participant.id + " has shortDuration=" + trial.duration.short + ", corrected to longDuration=" + trial.duration.long)
+            trial.duration.short = trial.duration.long;
+         }
       });
    });
 }

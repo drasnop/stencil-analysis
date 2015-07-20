@@ -9,6 +9,7 @@ basePayment = 2;
 bonusPerTrial = 0.05;
 bonusPerTab = 0.03;
 bonusPerOption = 0.03;
+totalNumTrials = 41;
 addPax = false;
 
 /* helper functions and dependencies */

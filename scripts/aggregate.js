@@ -4,8 +4,8 @@
 exports.filename = helpers.filename("aggregate");
 
 // filter data
-var minTrialNumber = 2;
-var onlySuccess = false;
+var minTrialNumber = 1;
+var onlySuccess = true;
 var onlyCHS = false;
 var useMedian = true;
 
@@ -55,8 +55,9 @@ helpers.validParticipants().forEach(function(participant) {
 
       /* accuracy */
 
-      "numSuccesses": getNumSuccesses(participant),
-      "numErrors": 10 - getNumSuccesses(participant)
+      "numTimeouts": helpers.getNumTimeouts(participant),
+      "numSuccesses": helpers.getNumSuccesses(participant),
+      "numErrors": totalNumTrials - helpers.getNumSuccesses(participant)
    })
 
 
@@ -66,12 +67,6 @@ helpers.validParticipants().forEach(function(participant) {
          tutorialSteps.push(step.duration);
       });
       return centralTendency(tutorialSteps);
-   }
-
-   function getNumSuccesses(participant) {
-      return participant.trials.filter(function(trial) {
-         return trial.success;
-      }).length;
    }
 
 });
