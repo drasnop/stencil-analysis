@@ -29,13 +29,17 @@ helpers.validParticipants().forEach(function(participant) {
          "targetOption": trial.targetOption,
          "targetTab": wunderlist.options[trial.targetOption].tab.name,
          "targetIndex": wunderlist.options[trial.targetOption].index,
+         "hideable": helpers.getChangedOptionPropertyAsNumber(trial, "hideable"),
+         "ghost": helpers.getChangedOptionPropertyAsNumber(trial, "ghost"),
+
          "numVisitedTabs": trial.visitedTabs ? trial.visitedTabs.length : 0,
          "numChangedOptions": trial.changedOptions ? trial.changedOptions.length : 0,
          "correctHookHasBeenSelected": trial.correctHookHasBeenSelected ? 1 : 0,
          "numPanelExpanded": numPanelExpanded(trial),
-         "panelWasExpanded": panelWasExpanded(trial) ? 1 : 0,
+         "panelWasExpanded": helpers.getChangedOptionPropertyAsNumber(trial, "panelExpanded"),
          "numClusterExpanded": numClusterExpanded(trial),
          "clusterWasExpanded": clusterWasExpanded(trial),
+
          "numSelectedHooks": trial.selectedHooks ? trial.selectedHooks.length : 0,
          "numUniqueHooksSelected": numUniqueHooksSelected(trial),
          "numSameHooksSelected": numSameHooksSelected(participant, trial),
@@ -79,14 +83,6 @@ function numPanelExpanded(trial) {
    }).length;
 }
 
-function panelWasExpanded(trial) {
-   if (!trial.changedOptions)
-      return 0;
-
-   return helpers.getMostInformativeChangedOption(trial).panelExpanded;
-}
-
-
 /* Clusters */
 
 function numClusterExpanded(trial) {
@@ -98,17 +94,16 @@ function numClusterExpanded(trial) {
    }).length;
 }
 
-// TODO for next batch: replace clusterCollapsed by clusterExpanded
 function clusterWasExpanded(trial) {
    if (!trial.changedOptions)
       return "";
 
    var option = helpers.getMostInformativeChangedOption(trial);
 
-   if (!option.clusterCollapsed)
+   if (!option.clusterExpanded)
       return "";
 
-   return option.clusterCollapsed ? 0 : 1;
+   return option.clusterExpanded ? 1 : 0;
 }
 
 /* Hooks */

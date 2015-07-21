@@ -132,7 +132,7 @@ exports.getBonus = function(worker) {
    var bonus = 0
 
    bonus += bonusPerTrial * worker.trials.filter(function(trial) {
-      return trial.success;
+      return trial.number >0 && trial.success;
    }).length;
 
    bonus += Math.max(0, (2 * worker.questionnaires.recognition.tabs.score - 10) * bonusPerTab);
@@ -184,6 +184,15 @@ exports.getMostInformativeChangedOption = function(trial) {
    // no success
    return trial.changedOptions[trial.changedOptions.length - 1];
 }
+
+// best effort to return a 0/1 value for a property of changed option
+exports.getChangedOptionPropertyAsNumber = function(trial, prop){
+   if (!trial.changedOptions)
+      return 0;
+
+   return helpers.getMostInformativeChangedOption(trial)[prop]? 1 : 0;
+}
+
 
 // get the number of trials, and print an error if some participants don't have the same number of trials
 exports.getNumTrials = function(participants) {
