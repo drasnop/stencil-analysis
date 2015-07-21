@@ -41,13 +41,14 @@ helpers.validParticipants().forEach(function(participant) {
 
       "easeOfUse": participant.questionnaires.preference.easeOfUse,
       "liking": participant.questionnaires.preference.liking,
+      "familiarity": participant.questionnaires.preference.familiarity? participant.questionnaires.preference.familiarity : "",
+      "search": participant.questionnaires.preference.search? participant.questionnaires.preference.search : "",
       "interfaceFeedback": helpers.formatStringForCSV(participant.questionnaires.preference.feedback),
 
       /* additional feedback */
 
       "generalFeedback": helpers.formatStringForCSV(participant.questionnaires.additionalFeedback),
       "feedbackLength": getTotalCharactersInFeedbacks(participant)
-
    })
 
    function getAge(participant) {

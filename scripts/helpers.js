@@ -456,6 +456,18 @@ exports.preprocessData = function() {
          }
       });
    });
+
+   // reverse search score to have visual search positive / text-based search negative
+   helpers.validParticipants().forEach(function(participant){
+      if(participant.condition.interface>0){
+
+         // weird behavior: parsing "0" to integer causes it to be unrecognized (null) in the csv...
+         if(participant.questionnaires.preference.search != 0){            
+            participant.questionnaires.preference.search = parseInt(participant.questionnaires.preference.search);
+            participant.questionnaires.preference.search= -participant.questionnaires.preference.search;
+         }
+      }
+   });
 }
 
 exports.checkData = function() {
