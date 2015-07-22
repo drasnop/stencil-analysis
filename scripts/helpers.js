@@ -402,6 +402,13 @@ Math.average = function(values) {
    }, 0) / values.length;
 }
 
+// computes the geometric mean of an array of values
+Math.geometricMean = function(values) {
+   return Math.exp(values.reduce(function(previousValue, currentValue) {
+      return previousValue + Math.log(currentValue);
+   }, 0) / values.length);
+}
+
 // computes the sample standard deviation of an array of values
 Math.ssd = function(values) {
    var mean = Math.average(values);

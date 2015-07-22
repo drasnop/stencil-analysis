@@ -37,16 +37,29 @@ helpers.validParticipants().forEach(function(participant) {
 helpers.sortByConditionThenParticipant(exports.output)
 
 
-function getAverageValueForValidParticipants(getter) {
-   return Math.average(helpers.validParticipants().map(function(participant) {
+function getAverageValueForValidParticipants(getter, average) {
+   return average(helpers.validParticipants().map(function(participant) {
       return getter(participant);
    }))
 }
 
+function printFormattedMeanDurations(getter) {
+   return helpers.formatMinuteSeconds(getAverageValueForValidParticipants(getter, Math.average)) + ' [' + helpers.formatMinuteSeconds(getAverageValueForValidParticipants(getter, Math.geometricMean)) + ']';
+}
+
+function getHourlyRate(participant) {
+   return helpers.getPayment(participant) / helpers.getTotalDuration(participant) * 60;
+}
+
+function printFormattedMeanPayments(getter) {
+   return getAverageValueForValidParticipants(getter, Math.average).toFixed(2) + ' [' + getAverageValueForValidParticipants(getter, Math.geometricMean).toFixed(2) + ']';
+}
+
+
 // print some summary statistics to the console
-console.log("Average tutorial duration (mm.ss):", helpers.formatMinuteSeconds(getAverageValueForValidParticipants(helpers.getTutorialDuration)));
-console.log("Average trials duration (mm.ss):", helpers.formatMinuteSeconds(getAverageValueForValidParticipants(helpers.getTrialsDuration)));
-console.log("Average total duration (mm.ss):", helpers.formatMinuteSeconds(getAverageValueForValidParticipants(helpers.getTotalDuration)));
-console.log("Average payment ($):", getAverageValueForValidParticipants(helpers.getPayment).toFixed(2));
-console.log("Average hourly rate ($/hr):", (getAverageValueForValidParticipants(helpers.getPayment) / getAverageValueForValidParticipants(helpers.getTotalDuration) * 60).toFixed(2));
+console.log("Average [geom] tutorial duration (mm.ss):", printFormattedMeanDurations(helpers.getTutorialDuration));
+console.log("Average [geom] trials duration (mm.ss):", printFormattedMeanDurations(helpers.getTrialsDuration));
+console.log("Average [geom] total duration (mm.ss):", printFormattedMeanDurations(helpers.getTotalDuration));
+console.log("Average [geom] payment ($):", printFormattedMeanPayments(helpers.getPayment));
+console.log("Average [geom] hourly rate ($/hr):", printFormattedMeanPayments(getHourlyRate));
 console.log();
