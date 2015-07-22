@@ -27,9 +27,12 @@ input.forEach(function(worker) {
       // # of experiment trials completed, if any
       "trials": worker.trials ? worker.trials.length : "",
 
+      // id of the option that worker did not complete
+      "nextOption": worker.trials && !helpers.isComplete(worker) ? worker.sequences.optionsSequence[worker.trials.length] : "",
 
       // "recognition", "preference", "all"
       "questionnaires": latestQuestionnaireCompletedBy(worker),
+
 
       // "duplicate" if worker participated more than once
       "duplicate": helpers.isDuplicate(worker) ? "duplicate" : "",
@@ -43,21 +46,20 @@ input.forEach(function(worker) {
       // "valid" if worker completed the experiment, but did not attempt to complete it multiple times
       "valid": helpers.isValid(worker) ? "valid" : "",
 
-      // id of the option that worker did not complete
-      "nextOption": worker.trials && !helpers.isComplete(worker) ? worker.sequences.optionsSequence[worker.trials.length] : "",
 
       // time it took participants to complete all steps of the tutorial
-      "tutorialDuration": worker.tutorial ? getTutorialDuration(worker) : "",
+      "tutorialDuration": worker.tutorial ? helpers.getTutorialDuration(worker) : "",
 
       // time it took participants to complete the 10 trials of the experiment
-      "trialsDuration": worker.trials ? getTrialsDuration(worker) : "",
+      "trialsDuration": worker.trials ? helpers.getTrialsDuration(worker) : "",
 
       // time it took participants to reach the final page, in minutes
-      "totalDuration": worker.instructions ? getTotalDuration(worker) : "",
+      "totalDuration": worker.instructions ? helpers.getTotalDuration(worker) : "",
 
       // base rate + bonus for that worker, if any
       "payment": helpers.isComplete(worker) ? helpers.getPayment(worker) : ""
    })
+
 
    // assuming participants couldn't complete questionnaires not in the right order: recognition, preference, demographics
    function latestQuestionnaireCompletedBy(worker) {
@@ -71,62 +73,11 @@ input.forEach(function(worker) {
          return "recognition";
    }
 
-   function getPayment(worker) {
-      if (!helpers.isComplete(worker))
-         return "";
-
-      return basePayment + getBonus(worker);
-   }
-
-   function getBonus(worker) {
-      var bonus = 0
-
-      bonus += bonusPerTrial * worker.trials.filter(function(trial) {
-         return trial.number > 0 && trial.success;
-      }).length;
-
-      bonus += Math.max(0, (2 * worker.questionnaires.recognition.tabs.score - 10) * bonusPerTab);
-      bonus += Math.max(0, (2 * worker.questionnaires.recognition.options.score - 20) * bonusPerOption);
-
-      return bonus;
-   }
-
    function getLastInstructionsPage(worker) {
       return worker.instructions.reduce(function(max, page) {
          return Math.max(max, page.page)
       }, 0);
    }
-
-   function getTutorialDuration(worker) {
-      // compute duration in seconds
-      var duration = worker.tutorial.reduce(function(duration, step) {
-         return duration + step.duration;
-      }, 0)
-
-      // return helpers.formatMinuteSeconds(duration);
-      return duration / 60;
-   }
-
-   function getTrialsDuration(worker) {
-      // compute duration in seconds
-      var duration = worker.trials.reduce(function(duration, trial) {
-         return duration + trial.duration.total;
-      }, 0)
-
-      // return helpers.formatMinuteSeconds(duration);
-      return duration / 60;
-   }
-
-   function getTotalDuration(worker) {
-      // compute duration in seconds
-      var duration = worker.instructions.reduce(function(duration, page) {
-         return duration + page.duration;
-      }, 0)
-
-      // return helpers.formatMinuteSeconds(duration);
-      return duration / 60;
-   }
-
 });
 
 // sort chronologically

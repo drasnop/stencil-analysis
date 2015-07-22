@@ -123,6 +123,36 @@ exports.uniqueDuplicateParticipants = function() {
    return duplicates;
 }
 
+exports.getTutorialDuration = function(worker) {
+   // compute duration in seconds
+   var duration = worker.tutorial.reduce(function(duration, step) {
+      return duration + step.duration;
+   }, 0)
+
+   // return helpers.formatMinuteSeconds(duration);
+   return duration / 60;
+}
+
+exports.getTrialsDuration = function(worker) {
+   // compute duration in seconds
+   var duration = worker.trials.reduce(function(duration, trial) {
+      return duration + trial.duration.total;
+   }, 0)
+
+   // return helpers.formatMinuteSeconds(duration);
+   return duration / 60;
+}
+
+exports.getTotalDuration = function(worker) {
+   // compute duration in seconds
+   var duration = worker.instructions.reduce(function(duration, page) {
+      return duration + page.duration;
+   }, 0)
+
+   // return helpers.formatMinuteSeconds(duration);
+   return duration / 60;
+}
+
 
 exports.getPayment = function(worker) {
    return basePayment + exports.getBonus(worker);
