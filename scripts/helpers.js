@@ -129,7 +129,7 @@ exports.getTutorialDuration = function(worker) {
       return duration + step.duration;
    }, 0)
 
-   // return helpers.formatMinuteSeconds(duration);
+   // return helpers.formatMinuteSeconds(duration/60);
    return duration / 60;
 }
 
@@ -139,7 +139,7 @@ exports.getTrialsDuration = function(worker) {
       return duration + trial.duration.total;
    }, 0)
 
-   // return helpers.formatMinuteSeconds(duration);
+   // return helpers.formatMinuteSeconds(duration/60);
    return duration / 60;
 }
 
@@ -149,7 +149,7 @@ exports.getTotalDuration = function(worker) {
       return duration + page.duration;
    }, 0)
 
-   // return helpers.formatMinuteSeconds(duration);
+   // return helpers.formatMinuteSeconds(duration/60);
    return duration / 60;
 }
 
@@ -162,7 +162,7 @@ exports.getBonus = function(worker) {
    var bonus = 0
 
    bonus += bonusPerTrial * worker.trials.filter(function(trial) {
-      return trial.number >0 && trial.success;
+      return trial.number > 0 && trial.success;
    }).length;
 
    bonus += Math.max(0, (2 * worker.questionnaires.recognition.tabs.score - 10) * bonusPerTab);
@@ -200,9 +200,9 @@ exports.unique = function(array) {
 // @input: duration in minutes (float)
 // return duration formatted as minutes.seconds
 exports.formatMinuteSeconds = function(duration) {
-   var minutes = Math.floor(duration / 60);
-   var seconds = Math.floor(duration) % 60;
-   return minutes + seconds / 100;
+   var minutes = Math.floor(duration);
+   var seconds = (duration - minutes) * 60;
+   return (minutes + seconds / 100).toFixed(2);
 }
 
 // return either the first correctly changed option, or the last one
@@ -216,11 +216,11 @@ exports.getMostInformativeChangedOption = function(trial) {
 }
 
 // best effort to return a 0/1 value for a property of changed option
-exports.getChangedOptionPropertyAsNumber = function(trial, prop){
+exports.getChangedOptionPropertyAsNumber = function(trial, prop) {
    if (!trial.changedOptions)
       return 0;
 
-   return helpers.getMostInformativeChangedOption(trial)[prop]? 1 : 0;
+   return helpers.getMostInformativeChangedOption(trial)[prop] ? 1 : 0;
 }
 
 
@@ -248,6 +248,16 @@ exports.getNumSuccesses = function(participant) {
    return participant.trials.filter(function(trial) {
       return trial.success;
    }).length;
+}
+
+// sort by condition then participant, to make output easier to read
+exports.sortByConditionThenParticipant = function(output) {
+   output.sort(function(workerDataA, workerDataB) {
+      if (workerDataA.interface == workerDataB.interface)
+         return exports.compareAlphaNum(workerDataA.id, workerDataB.id);
+      else
+         return workerDataA.interface - workerDataB.interface;
+   })
 }
 
 /* methods for writing output csv files */
@@ -488,13 +498,13 @@ exports.preprocessData = function() {
    });
 
    // reverse search score to have visual search positive / text-based search negative
-   helpers.validParticipants().forEach(function(participant){
-      if(participant.condition.interface>0){
+   helpers.validParticipants().forEach(function(participant) {
+      if (participant.condition.interface > 0) {
 
          // weird behavior: parsing "0" to integer causes it to be unrecognized (null) in the csv...
-         if(participant.questionnaires.preference.search != 0){            
+         if (participant.questionnaires.preference.search != 0) {
             participant.questionnaires.preference.search = parseInt(participant.questionnaires.preference.search);
-            participant.questionnaires.preference.search= -participant.questionnaires.preference.search;
+            participant.questionnaires.preference.search = -participant.questionnaires.preference.search;
          }
       }
    });

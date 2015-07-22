@@ -69,14 +69,7 @@ helpers.validParticipants().forEach(function(participant) {
 });
 
 
-// sort by condition then participant, to make it easier to read
-exports.output.sort(function(workerDataA, workerDataB) {
-
-   if (workerDataA.interface == workerDataB.interface)
-      return helpers.compareAlphaNum(workerDataA.id, workerDataB.id);
-   else
-      return workerDataA.interface - workerDataB.interface;
-})
+helpers.sortByConditionThenParticipant(exports.output)
 
 
 // print some summary statistics to the console

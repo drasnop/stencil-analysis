@@ -76,8 +76,8 @@ helpers.checkData();
 
 /* output */
 
-var scripts=["workers", "bonuses", "questionnaires-participants", "trials", "tutorial", "aggregate", "standard-errors", "standard-error"];
+var scripts = ["workers", "participants", "bonuses", "questionnaires-participants", "trials", "tutorial", "aggregate", "standard-errors", "standard-error"];
 
-scripts.forEach(function(script){
-   helpers.writeJSONtoCSVfile(helpers.filename(script), require("./"+script+".js").output);
+scripts.forEach(function(script) {
+   helpers.writeJSONtoCSVfile(helpers.filename(script), require("./" + script + ".js").output);
 });

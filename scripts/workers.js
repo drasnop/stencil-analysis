@@ -46,7 +46,7 @@ input.forEach(function(worker) {
       // time it took participants to complete all steps of the tutorial
       "tutorialDuration": worker.tutorial ? helpers.getTutorialDuration(worker) : "",
 
-      // time it took participants to complete the 10 trials of the experiment
+      // time it took participants to complete all the trials of the experiment
       "trialsDuration": worker.trials ? helpers.getTrialsDuration(worker) : "",
 
       // time it took participants to reach the final page, in minutes
