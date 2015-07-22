@@ -1,13 +1,9 @@
 /* compute the standard error for each participant, as we increase the number of trials */
 
-// generate filename
-exports.filename = helpers.filename("standard-errors");
-
 // filter data
 var minTrialNumber = 0;
 var onlySuccess = false;
 var onlyCHS = false;
-
 
 // parse data
 exports.output = [];

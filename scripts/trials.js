@@ -1,12 +1,5 @@
 /* write data for each trial of each valid participant in this batch */
 
-// generate filename
-exports.filename = helpers.filename("trials");
-
-/* It could be useful to filter out trials with a hidden hook that had to be revealed = a visible ghost */
-
-
-// parse data
 exports.output = [];
 helpers.validParticipants().forEach(function(participant) {
 

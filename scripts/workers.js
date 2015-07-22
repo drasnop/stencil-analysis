@@ -1,9 +1,5 @@
 /* write summary of all the workers in this batch */
 
-// generate filename
-exports.filename = helpers.filename("workers");
-
-// parse data
 exports.output = [];
 input.forEach(function(worker) {
 

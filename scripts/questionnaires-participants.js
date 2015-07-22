@@ -1,9 +1,5 @@
 /* write data from all 3 questionnaires for the valid participants in this batch */
 
-// generate filename
-exports.filename = helpers.filename("questionnaires-participants");
-
-// parse data
 exports.output = [];
 helpers.validParticipants().forEach(function(participant) {
 

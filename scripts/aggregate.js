@@ -1,8 +1,5 @@
 /* compile data for each participant, to be used in ANOVA */
 
-// generate filename
-exports.filename = helpers.filename("aggregate");
-
 // filter data
 var minTrialNumber = 1;
 var onlySuccess = true;

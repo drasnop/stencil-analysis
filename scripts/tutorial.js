@@ -1,9 +1,5 @@
 /* write data for each step of the the tutorial, for each valid participant in this batch */
 
-// generate filename
-exports.filename = helpers.filename("tutorial");
-
-// parse data
 exports.output = [];
 helpers.validParticipants().forEach(function(participant) {
 

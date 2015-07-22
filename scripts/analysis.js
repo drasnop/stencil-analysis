@@ -1,5 +1,5 @@
 /* Load dependencies and call other scripts to generate all outputs based on original json file */
-/* Each parsing script must expose a filename and an output array */
+/* Each parsing script must expose an output array */
 
 // parameters
 batch = "2-24";
@@ -76,26 +76,8 @@ helpers.checkData();
 
 /* output */
 
-var workers = require("./workers.js");
-helpers.writeJSONtoCSVfile(workers.filename, workers.output)
+var scripts=["workers", "bonuses", "questionnaires-participants", "trials", "tutorial", "aggregate", "standard-errors", "standard-error"];
 
-var bonuses = require("./bonuses.js");
-helpers.writeJSONtoCSVfile(bonuses.filename, bonuses.output)
-
-var questionnairesParticipants = require("./questionnaires-participants.js");
-helpers.writeJSONtoCSVfile(questionnairesParticipants.filename, questionnairesParticipants.output)
-
-var trials = require("./trials.js");
-helpers.writeJSONtoCSVfile(trials.filename, trials.output)
-
-var tutorial = require("./tutorial.js");
-helpers.writeJSONtoCSVfile(tutorial.filename, tutorial.output)
-
-var aggregate = require("./aggregate.js");
-helpers.writeJSONtoCSVfile(aggregate.filename, aggregate.output)
-
-var standardErrors = require("./standard-errors.js");
-helpers.writeJSONtoCSVfile(standardErrors.filename, standardErrors.output)
-
-var standardError = require("./standard-error.js");
-helpers.writeJSONtoCSVfile(standardError.filename, standardError.output)
+scripts.forEach(function(script){
+   helpers.writeJSONtoCSVfile(helpers.filename(script), require("./"+script+".js").output);
+});

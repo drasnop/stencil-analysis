@@ -1,7 +1,5 @@
 /* compute the standard error of the mean for each interface type, as we increase the number of trials */
 
-// generate filename
-exports.filename = helpers.filename("standard-error");
 exports.output = [];
 
 // filter data

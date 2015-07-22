@@ -1,9 +1,5 @@
 /* create a csv file with the bonus to give to each participant */
 
-// generate filename
-exports.filename = helpers.filename("bonuses");
-
-// parse data
 exports.output = [];
 helpers.validParticipants().forEach(function(worker) {
 
