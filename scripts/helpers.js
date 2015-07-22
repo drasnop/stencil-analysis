@@ -68,23 +68,37 @@ exports.isBadDuplicate = function(worker) {
 
 
 // get all the workers in this batch who at least started the tutorial (not unique)
-exports.startedTutorialButNotCompleteParticipants = function() {
+exports.startedTutorialButNotCompleteWorkers = function() {
    return input.filter(function(worker) {
       return worker.tutorial && !exports.isComplete(worker);
    })
 }
 
+// get all the workers in this batch who at least started the experiment trials (not unique)
+exports.startedExperimentButNotCompleteWorkers = function() {
+   return input.filter(function(worker) {
+      return worker.trials && worker.trials.length > 1 && !exports.isComplete(worker);
+   })
+}
+
 // get all the duplicate participants in this batch (not unique)
-exports.duplicateParticipants = function() {
+exports.duplicateWorkers = function() {
    return input.filter(function(worker) {
       return exports.isDuplicate(worker);
    })
 }
 
 // get all the bad duplicate participants in this batch (not unique?)
-exports.badDuplicateParticipants = function() {
+exports.badDuplicateWorkers = function() {
    return input.filter(function(worker) {
       return exports.isBadDuplicate(worker);
+   })
+}
+
+// get all the bad duplicate participants in this batch who are also complete (not unique?)
+exports.badDuplicateAndCompleteWorkers = function() {
+   return input.filter(function(worker) {
+      return exports.isBadDuplicate(worker) && exports.isComplete(worker);
    })
 }
 
@@ -104,7 +118,7 @@ exports.validParticipants = function() {
 
 // indicate which participants tried to do the experiment multiple times (even if it was never valid)
 // NB: calling input.filter(isDuplicate) would cause the output to contain... duplicates!
-exports.uniqueDuplicateParticipants = function() {
+exports.uniqueDuplicateWorkers = function() {
    var participantsIds = [];
    var duplicatesIds = []
    var duplicates = [];

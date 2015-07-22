@@ -81,13 +81,22 @@ exports.output.sort(function(workerA, workerB) {
    return workerA.timestamp - workerB.timestamp;
 })
 
+var startedExperiment = helpers.startedExperimentButNotCompleteWorkers();
+var numTrials = startedExperiment.map(function(worker) {
+   return worker.trials.length;
+})
+
 // print some summary statistics to the console
 console.log();
 console.log(Object.keys(input).length + " workers processed");
-console.log(Object.keys(helpers.duplicateParticipants()).length + " duplicate workers");
-console.log(Object.keys(helpers.uniqueDuplicateParticipants()).length + " unique duplicate participants");
-console.log(Object.keys(helpers.badDuplicateParticipants()).length + " bad duplicate participants");
-console.log(Object.keys(helpers.startedTutorialButNotCompleteParticipants()).length + " workers started tutorial but did not complete experiment");
+console.log(Object.keys(helpers.duplicateWorkers()).length + " duplicate workers");
+console.log(Object.keys(helpers.uniqueDuplicateWorkers()).length + " unique duplicate workers");
+console.log(Object.keys(helpers.badDuplicateWorkers()).length + " bad duplicate workers");
+console.log(Object.keys(helpers.badDuplicateAndCompleteWorkers()).length + " bad duplicate workers who may have submitted HIT");
+
+console.log();
+console.log(Object.keys(helpers.startedTutorialButNotCompleteWorkers()).length + " workers started tutorial but did not complete experiment");
+console.log(Object.keys(startedExperiment).length + " workers started experiment but did not complete it (" + numTrials.join(", ") + ")");
 console.log(Object.keys(helpers.completeParticipants()).length + " complete participants");
 console.log(Object.keys(helpers.validParticipants()).length + " valid participants");
 console.log();
