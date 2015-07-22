@@ -262,7 +262,6 @@ exports.sortByConditionThenParticipant = function(output) {
 
 /* methods for writing output csv files */
 
-
 // convert array of JSON objects into a multi-line csv representation
 function JSONtoCSV(data) {
 
@@ -320,6 +319,36 @@ exports.formatStringForCSV = function(string) {
       return "";
    return '"' + string.split('"').join("'") + '"';
 }
+
+// rewire console.log to also print to a file
+console.originalLog = console.log.bind(console);
+console.log = function() {
+   // True array copy
+   var args = Array.prototype.slice.call(arguments, 0);
+
+   if (arguments.length) {
+
+      // If there is a format string then... it must be a string
+      if (typeof arguments[0] === "string") {
+         // Log the whole array
+         this.originalLog.apply(this, args);
+      } else {
+         // "Normal" log
+         this.originalLog(args);
+      }
+   } else {
+      // print empty line
+      this.originalLog();
+   }
+
+   // copy output to external file
+   //this.originalLog(consoleOutputFilepath)
+   logStream.write(args.join(' ') + '\n');
+};
+
+
+/* Math functions */
+
 
 // compare two alphanumeric strings
 exports.compareAlphaNum = function(a, b) {

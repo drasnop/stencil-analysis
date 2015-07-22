@@ -5,6 +5,7 @@
 batch = "2-24";
 var inputFolder = batch + "/mturk/";
 var inputFilepath = inputFolder + batch + ".json";
+consoleOutputFilepath = batch + "/" + "info-" + batch + ".log";
 basePayment = 2;
 bonusPerTrial = 0.05;
 bonusPerTab = 0.03;
@@ -50,12 +51,18 @@ wunderlist = {
    "mappings": JSON.parse(fs.readFileSync(inputFolder + "mappings_wunderlist.json", 'utf8'))
 }
 
+// prepare logging of console ouput to text file
+logStream = fs.createWriteStream(consoleOutputFilepath, {
+   flags: 'w'
+});
+
 
 /* input */
 
 // read input data
 input = JSON.parse(fs.readFileSync(inputFilepath, 'utf8'));
 console.log("Input file parsed: ", inputFilepath)
+console.log()
 
 // add pax's data, to have an even number of participants
 if (addPax) {
