@@ -1,33 +1,50 @@
 /* compile data for each participant, to be used in ANOVA */
 
 // filter data
-var minTrialNumber = 1;
 var onlySuccess = true;
 var onlyCHS = false;
-var maxProblemTolerated = 0;
 
 // parse data
 exports.output = [];
 helpers.validParticipants().forEach(function(participant) {
 
-   if (problems[participant.id] > maxProblemTolerated)
-      return;
+   /* get ready to compute the average or the median of durations for each trial of each participant, for block 0, 1 and 2 */
 
-   /* get ready to compute the average or the median of durations for each trial of each participant */
-
-   var instructionsDurations = [];
-   var shortDurations = [];
-   var longDurations = [];
-   var logShortDurations = [];
-   var logLongDurations = [];
+   var instructionsDurations = [
+      [],
+      [],
+      []
+   ];
+   var shortDurations = [
+      [],
+      [],
+      []
+   ];
+   var longDurations = [
+      [],
+      [],
+      []
+   ];
+   var logShortDurations = [
+      [],
+      [],
+      []
+   ];
+   var logLongDurations = [
+      [],
+      [],
+      []
+   ];
 
    participant.trials.forEach(function(trial) {
-      if (trial.number >= minTrialNumber && (!onlySuccess || trial.success) && (!onlyCHS || trial.correctHookHasBeenSelected || participant.condition.interface === 0)) {
-         instructionsDurations.push(trial.duration.instructions);
-         shortDurations.push(trial.duration.short);
-         longDurations.push(trial.duration.long);
-         logShortDurations.push(Math.log(1 + trial.duration.short));
-         logLongDurations.push(Math.log(1 + trial.duration.long));
+      if ((!onlySuccess || trial.success) && (!onlyCHS || trial.correctHookHasBeenSelected || participant.condition.interface === 0)) {
+         var block = helpers.getBlock(trial);
+
+         instructionsDurations[block].push(trial.duration.instructions);
+         shortDurations[block].push(trial.duration.short);
+         longDurations[block].push(trial.duration.long);
+         logShortDurations[block].push(Math.log(1 + trial.duration.short));
+         logLongDurations[block].push(Math.log(1 + trial.duration.long));
       }
    });
 
@@ -39,35 +56,38 @@ helpers.validParticipants().forEach(function(participant) {
       return Math.average(tutorialSteps);
    }
 
+   for (var block = 0; block <= 2; block++) {
+      exports.output.push({
 
-   exports.output.push({
+         /* general information about this participant */
 
-      /* general information about this participant */
+         "id": participant.id,
+         "problems": problems[participant.id],
+         "defaults": participant.condition.oppositeDefaults ? "opposite" : "",
+         "interface": participant.condition.interface,
+         "interfaceType": participant.condition.interface > 0 ? "customizationMode" : "control",
+         "block": block,
 
-      "id": participant.id,
-      "defaults": participant.condition.oppositeDefaults ? "opposite" : "",
-      "interface": participant.condition.interface,
-      "interfaceType": participant.condition.interface > 0 ? "customizationMode" : "control",
+         /* durations */
 
-      /* durations */
+         "tutorialDuration": computeAverageTutorialDuration(participant),
+         "instructionsDuration": Math.average(instructionsDurations[block]),
 
-      "tutorialDuration": computeAverageTutorialDuration(participant),
-      "instructionsDuration": Math.average(instructionsDurations),
+         "averageShortDuration": Math.average(shortDurations[block]),
+         "medianShortDuration": Math.median(shortDurations[block]),
+         "averageLogShortDuration": Math.exp(Math.average(logShortDurations[block])) - 1,
 
-      "averageShortDuration": Math.average(shortDurations),
-      "medianShortDuration": Math.median(shortDurations),
-      "averageLogShortDuration": Math.exp(Math.average(logShortDurations)) - 1,
+         "averageLongDuration": Math.average(longDurations[block]),
+         "medianLongDuration": Math.median(longDurations[block]),
+         "averageLogLongDuration": Math.exp(Math.average(logLongDurations[block])) - 1,
 
-      "averageLongDuration": Math.average(longDurations),
-      "medianLongDuration": Math.median(longDurations),
-      "averageLogLongDuration": Math.exp(Math.average(logLongDurations)) - 1,
+         /* accuracy */
 
-      /* accuracy */
-
-      "numTimeouts": helpers.getNumTimeouts(participant),
-      "numSuccesses": helpers.getNumSuccesses(participant),
-      "numErrors": totalNumTrials - helpers.getNumSuccesses(participant)
-   })
+         "numTimeouts": helpers.getNumTimeouts(participant),
+         "numSuccesses": helpers.getNumSuccesses(participant),
+         "numErrors": totalNumTrials - helpers.getNumSuccesses(participant)
+      })
+   }
 });
 
 
@@ -77,11 +97,14 @@ helpers.sortByConditionThenParticipant(exports.output)
 // print some summary statistics to the console
 console.log(exports.output.length + " participants")
 for (var i = 0; i <= 3; i++) {
-   var count = exports.output.filter(filterByInterface).length;
-   console.log("interface " + i + ": " + count + " participants")
+   var counts = "";
+   for (var j = 0; j <= 2; j++) {
+      counts += exports.output.filter(filterByInterfaceAndBlock).length + " ";
+   }
+   console.log("interface " + i + ": " + counts + "participants")
 }
 console.log()
 
-function filterByInterface(participant) {
-   return participant.interface === i;
+function filterByInterfaceAndBlock(participant) {
+   return participant.interface === i && participant.block === j;
 }

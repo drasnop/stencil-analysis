@@ -194,6 +194,15 @@ exports.getTrial = function(participant, trialNumber) {
    return false;
 }
 
+exports.getBlock = function(trial) {
+   if (trial.number >= 21)
+      return 2;
+   if (trial.number >= 1)
+      return 1;
+   else
+      return 0;
+}
+
 exports.getSelector = function(option_id) {
    for (var i in wunderlist.mappings) {
       if (wunderlist.mappings[i].options.indexOf(option_id) >= 0)
