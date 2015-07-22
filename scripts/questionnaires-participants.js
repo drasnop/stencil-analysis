@@ -10,7 +10,7 @@ helpers.validParticipants().forEach(function(participant) {
       /* demographics */
 
       "gender": participant.questionnaires.demographics.gender,
-      "age": getAge(participant),
+      "age": helpers.getAge(participant),
       "computerUse": participant.questionnaires.demographics.computerUse,
       "wunderlistUse": participant.questionnaires.demographics.wunderlistUse,
 
@@ -37,8 +37,8 @@ helpers.validParticipants().forEach(function(participant) {
 
       "easeOfUse": participant.questionnaires.preference.easeOfUse,
       "liking": participant.questionnaires.preference.liking,
-      "familiarity": participant.questionnaires.preference.familiarity? participant.questionnaires.preference.familiarity : "",
-      "search": participant.questionnaires.preference.search? participant.questionnaires.preference.search : "",
+      "familiarity": participant.questionnaires.preference.familiarity ? participant.questionnaires.preference.familiarity : "",
+      "search": participant.questionnaires.preference.search ? participant.questionnaires.preference.search : "",
       "interfaceFeedback": helpers.formatStringForCSV(participant.questionnaires.preference.feedback),
 
       /* additional feedback */
@@ -46,12 +46,6 @@ helpers.validParticipants().forEach(function(participant) {
       "generalFeedback": helpers.formatStringForCSV(participant.questionnaires.additionalFeedback),
       "feedbackLength": getTotalCharactersInFeedbacks(participant)
    })
-
-   function getAge(participant) {
-      if (participant.questionnaires.demographics.ageNA)
-         return "N/A";
-      return participant.questionnaires.demographics.age;
-   }
 
    function getTotalCharactersInFeedbacks(participant) {
       var count = 0;

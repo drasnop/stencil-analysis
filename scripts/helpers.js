@@ -237,6 +237,12 @@ exports.getChangedOptionPropertyAsNumber = function(trial, prop) {
    return helpers.getMostInformativeChangedOption(trial)[prop] ? 1 : 0;
 }
 
+// returns the age if provided, otherwise N/A
+exports.getAge = function(participant) {
+   if (participant.questionnaires.demographics.ageNA)
+      return "N/A";
+   return participant.questionnaires.demographics.age;
+}
 
 // get the number of trials, and print an error if some participants don't have the same number of trials
 exports.getNumTrials = function(participants) {
