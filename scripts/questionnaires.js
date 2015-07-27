@@ -32,6 +32,7 @@ helpers.validParticipants().forEach(function(participant) {
       "optionsRecognitionScoreSelected": computeScore(getSelectedOptions(participant)),
       "optionsRecognitionScoreAdjacent": computeScore(getAdjacentOptions(participant)),
       "optionsRecognitionScoreFake": computeScore(getFakeOptions(participant)),
+      "numValidAdjacentOptions": getNumValidAdjacentOptions(participant),
 
       /* preference */
 
@@ -81,6 +82,13 @@ helpers.validParticipants().forEach(function(participant) {
       return responses.reduce(function(score, response) {
          return score + (response.correct ? 1 : 0);
       }, 0)
+   }
+
+   // Ideally it should return 5 out of 5. But of course it cannot succeed if the number of errors is huge.
+   function getNumValidAdjacentOptions(participant) {
+      return participant.questionnaires.recognition.options.responses.filter(function(response) {
+         return response.adjacent && response.valid;
+      }).length;
    }
 });
 
