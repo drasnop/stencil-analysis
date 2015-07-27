@@ -75,6 +75,9 @@ helpers.validParticipants().forEach(function(participant) {
    }
 
    function computeScore(responses) {
+      if (responses.length !== 5 && responses.length !== 10)
+         console.log("Error! In options recognition questionnaire, number of options is: " + responses.length)
+
       return responses.reduce(function(score, response) {
          return score + (response.correct ? 1 : 0);
       }, 0)
