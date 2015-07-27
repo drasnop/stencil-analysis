@@ -1,5 +1,67 @@
 /* write data for each trial of each valid participant in this batch */
 
+// TODO for next batch: simply get .hideable from target.option
+hideable = [
+   "shortcut_goto_filter_assigned",
+   "shortcut_goto_filter_starred",
+   "shortcut_goto_filter_today",
+   "shortcut_goto_filter_week",
+   "shortcut_goto_filter_all",
+   "shortcut_goto_filter_completed",
+   "smartlist_visibility_assigned_to_me",
+   "smartlist_visibility_starred",
+   "smartlist_visibility_today",
+   "smartlist_visibility_week",
+   "smartlist_visibility_all",
+   "smartlist_visibility_done",
+   "today_smart_list_visible_tasks"
+]
+
+// 0 = not in tutorial, 0.5 = not really, but could be inferred, 0.8 = very similar to one in tutorial, 1 = explicitly in tutorial
+hookInTutorial = {
+   "language": 0,
+   "date_format": 0.5,
+   "time_format": 0.5,
+   "start_of_week": 0.5,
+   "sound_checkoff_enabled": 1,
+   "sound_notification_enabled": 1,
+   "new_task_location": 1,
+   "confirm_delete_entity": 1,
+   "behavior_star_tasks_to_top": 1,
+   "print_completed_items": 1,
+   "show_subtask_progress": 0,
+   "shortcut_add_new_task": 1,
+   "shortcut_add_new_list": 1,
+   "shortcut_mark_task_done": 1,
+   "shortcut_mark_task_starred": 1,
+   "shortcut_select_all_tasks": 0,
+   "shortcut_delete": 1,
+   "shortcut_copy_tasks": 0,
+   "shortcut_paste_tasks": 0,
+   "shortcut_goto_search": 1,
+   "shortcut_goto_preferences": 1,
+   "shortcut_send_via_email": 0,
+   "shortcut_show_notifications": 1,
+   "shortcut_goto_inbox": 1,
+   "shortcut_goto_filter_assigned": 0.8,
+   "shortcut_goto_filter_starred": 1,
+   "shortcut_goto_filter_today": 0.8,
+   "shortcut_goto_filter_week": 0.8,
+   "shortcut_goto_filter_all": 0.8,
+   "shortcut_goto_filter_completed": 0.8,
+   "shortcut_sync": 0.5,
+   "smartlist_visibility_assigned_to_me": 0.8,
+   "smartlist_visibility_starred": 1,
+   "smartlist_visibility_today": 0.8,
+   "smartlist_visibility_week": 0.8,
+   "smartlist_visibility_all": 0.8,
+   "smartlist_visibility_done": 0.8,
+   "today_smart_list_visible_tasks": 0,
+   "notifications_email_enabled": 1,
+   "notifications_push_enabled": 1,
+   "notifications_desktop_enabled": 1,
+}
+
 exports.output = [];
 helpers.validParticipants().forEach(function(participant) {
 
@@ -22,8 +84,12 @@ helpers.validParticipants().forEach(function(participant) {
          "targetOption": trial.targetOption,
          "targetTab": wunderlist.options[trial.targetOption].tab.name,
          "targetIndex": wunderlist.options[trial.targetOption].index,
+         "targetHideable": hideable.indexOf(trial.targetOption) >= 0 ? 1 : 0,
+         // TODO for next batch: replace these with target.hideable and target.ghost
          "hideable": helpers.getChangedOptionPropertyAsNumber(trial, "hideable"),
          "ghost": helpers.getChangedOptionPropertyAsNumber(trial, "ghost"),
+         "showMore": wunderlist.options[trial.targetOption].more ? 1 : 0,
+         "hookInTutorial": hookInTutorial[trial.targetOption],
 
          "numVisitedTabs": trial.visitedTabs ? trial.visitedTabs.length : 0,
          "numChangedOptions": trial.changedOptions ? trial.changedOptions.length : 0,
@@ -43,6 +109,9 @@ helpers.validParticipants().forEach(function(participant) {
 
          "success": trial.success ? 1 : 0,
          "timeout": trial.timeout ? 1 : 0,
+         "changedOption": trial.changedOptions ? helpers.getMostInformativeChangedOption(trial).option_ID : "",
+         "changedValue": trial.changedOptions ? helpers.getMostInformativeChangedOption(trial).newValue : "",
+         "targetValue": trial.targetValue,
 
          /* durations */
          "instructionsDuration": trial.duration.instructions,
