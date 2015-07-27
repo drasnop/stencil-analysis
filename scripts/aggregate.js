@@ -2,6 +2,7 @@
 
 // filter data
 var onlySuccess = true;
+var onlyNonGhost = true;
 var onlyCHS = false;
 
 // parse data
@@ -37,7 +38,7 @@ helpers.validParticipants().forEach(function(participant) {
    ];
 
    participant.trials.forEach(function(trial) {
-      if ((!onlySuccess || trial.success) && (!onlyCHS || trial.correctHookHasBeenSelected || participant.condition.interface === 0)) {
+      if ((!onlySuccess || trial.success) && (!onlyCHS || trial.correctHookHasBeenSelected || participant.condition.interface === 0) && (!onlyNonGhost || !helpers.getChangedOptionPropertyAsNumber(trial, "ghost"))) {
          var block = helpers.getBlock(trial);
 
          instructionsDurations[block].push(trial.duration.instructions);
