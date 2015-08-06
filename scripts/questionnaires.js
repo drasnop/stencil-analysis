@@ -18,6 +18,7 @@ helpers.validParticipants().forEach(function(participant) {
 
       "defaults": participant.condition.oppositeDefaults ? "opposite" : "",
       "interface": participant.condition.interface,
+      "interfaceType": participant.condition.interface > 0 ? "customizationMode" : "control",
 
       /* additional information on how they performed in the experiment */
 

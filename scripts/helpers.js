@@ -13,11 +13,11 @@ exports.isValid = function(worker) {
 // check if one worker completed the entire experiment (does not check for duplicates)
 exports.isComplete = function(worker) {
    // filter out people who did not complete the tutorial (minimum number of steps is 14)
-   if (!worker.tutorial || Object.keys(worker.tutorial).length < 14)
+   if (!worker.tutorial || Object.keys(worker.tutorial).length < totalNumTutorial)
       return false;
 
    // filter out people who did not complete the experiment
-   if (!worker.trials || worker.trials.length < 10)
+   if (!worker.trials || worker.trials.length < totalNumTrials)
       return false;
 
    // filter out people who did not complete all the questionnaires
@@ -583,14 +583,14 @@ exports.checkData = function() {
          return;
 
       participant.trials.forEach(function(trial) {
-         var correctHookSelector = exports.getSelector(trial.targetOption);
+         var correctHookSelector = exports.getSelector(trial.target.option);
          var correctHookHasBeenSelected = false;
 
          // check if this selector appears in the list of clicked hooks
          if (trial.selectedHooks) {
             trial.selectedHooks.forEach(function(hook) {
 
-               if (hook.options_IDs.indexOf(trial.targetOption) >= 0)
+               if (hook.options_IDs.indexOf(trial.target.option) >= 0)
                   correctHookHasBeenSelected = true;
             });
          }
@@ -600,7 +600,7 @@ exports.checkData = function() {
             return;
 
          if (correctHookHasBeenSelected !== trial.correctHookHasBeenSelected)
-            console.log("Error! correctHookHasBeenSelected is inconsistent in trial " + trial.number + " of participant " + participant.id, correctHookHasBeenSelected, trial.correctHookHasBeenSelected, trial.targetOption)
+            console.log("Error! correctHookHasBeenSelected is inconsistent in trial " + trial.number + " of participant " + participant.id, correctHookHasBeenSelected, trial.correctHookHasBeenSelected, trial.target.option)
       });
    });
 }

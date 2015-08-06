@@ -23,7 +23,7 @@ stream.writeCsvLine = function(array) {
 
 // utility functions for writing trial data
 stream.writeTrialLine = function(trial, array) {
-   var info = [trial.number, trial.targetOption]
+   var info = [trial.number, trial.target.option]
    stream.writeCsvLine(info.concat(array))
 }
 stream.writeTrialsHeaders = function(array) {

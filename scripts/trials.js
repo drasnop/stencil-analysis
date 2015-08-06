@@ -81,15 +81,14 @@ helpers.validParticipants().forEach(function(participant) {
 
          "block": helpers.getBlock(trial),
          "trialNumber": trial.number,
-         "targetOption": trial.targetOption,
-         "targetTab": wunderlist.options[trial.targetOption].tab.name,
-         "targetIndex": wunderlist.options[trial.targetOption].index,
-         "targetHideable": hideable.indexOf(trial.targetOption) >= 0 ? 1 : 0,
-         // TODO for next batch: replace these with target.hideable and target.ghost
-         "hideable": helpers.getChangedOptionPropertyAsNumber(trial, "hideable"),
-         "ghost": helpers.getChangedOptionPropertyAsNumber(trial, "ghost"),
-         "showMore": wunderlist.options[trial.targetOption].more ? 1 : 0,
-         "hookInTutorial": hookInTutorial[trial.targetOption],
+         "targetOption": trial.target.option,
+         "targetTab": wunderlist.options[trial.target.option].tab.name,
+         "targetIndex": wunderlist.options[trial.target.option].index,
+         // "targetHideable": hideable.indexOf(trial.target.option) >= 0 ? 1 : 0,
+         "hideable": trial.target.hideable ? 1 : 0,
+         "ghost": trial.target.ghost ? 1 : 0,
+         "showMore": wunderlist.options[trial.target.option].more ? 1 : 0,
+         "hookInTutorial": hookInTutorial[trial.target.option],
 
          "numVisitedTabs": trial.visitedTabs ? trial.visitedTabs.length : 0,
          "numChangedOptions": trial.changedOptions ? trial.changedOptions.length : 0,
