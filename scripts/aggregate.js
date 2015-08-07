@@ -92,7 +92,7 @@ helpers.validParticipants().forEach(function(participant) {
 });
 
 
-helpers.sortByConditionThenParticipant(exports.output)
+helpers.sortByConditionThenParticipantID(exports.output)
 
 
 // print some summary statistics to the console

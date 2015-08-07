@@ -86,7 +86,8 @@ helpers.validParticipants().forEach(function(participant) {
          "targetIndex": wunderlist.options[trial.target.option].index,
          // "targetHideable": hideable.indexOf(trial.target.option) >= 0 ? 1 : 0,
          "hideable": trial.target.hideable ? 1 : 0,
-         "ghost": trial.target.ghost ? 1 : 0,
+         // todo: there should be no ghosts in control
+         "ghost": trial.target.ghost && participant.condition.interface > 0 ? 1 : 0,
          "showMore": wunderlist.options[trial.target.option].more ? 1 : 0,
          "hookInTutorial": hookInTutorial[trial.target.option],
 
