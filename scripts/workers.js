@@ -76,10 +76,7 @@ input.forEach(function(worker) {
    }
 });
 
-// sort chronologically
-exports.output.sort(function(workerA, workerB) {
-   return workerA.timestamp - workerB.timestamp;
-})
+helpers.sortChronologically(exports.output)
 
 var startedExperiment = helpers.startedExperimentButNotCompleteWorkers();
 var numTrials = startedExperiment.map(function(worker) {

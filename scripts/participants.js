@@ -70,7 +70,7 @@ helpers.validParticipants().forEach(function(participant) {
 });
 
 
-helpers.sortByConditionThenParticipant(exports.output)
+helpers.sortByConditionThenTimestamp(exports.output)
 
 
 function getAverageValueForValidParticipants(getter, average) {

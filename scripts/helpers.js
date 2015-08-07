@@ -279,15 +279,33 @@ exports.getNumSuccesses = function(participant) {
    }).length;
 }
 
-// sort by condition then participant, to make output easier to read
-exports.sortByConditionThenParticipant = function(output) {
-   output.sort(function(workerDataA, workerDataB) {
-      if (workerDataA.interface == workerDataB.interface)
-         return exports.compareAlphaNum(workerDataA.id, workerDataB.id);
-      else
-         return workerDataA.interface - workerDataB.interface;
+// sort chronologically
+exports.sortChronologically = function(output) {
+   output.sort(function(workerA, workerB) {
+      return workerA.timestamp - workerB.timestamp;
    })
 }
+
+// sort by condition then participant
+exports.sortByConditionThenParticipantID = function(output) {
+   output.sort(function(workerA, workerB) {
+      if (workerA.interface == workerB.interface)
+         return exports.compareAlphaNum(workerA.id, workerB.id);
+      else
+         return workerA.interface - workerB.interface;
+   })
+}
+
+// sort by condition then chronologically
+exports.sortByConditionThenTimestamp = function(output) {
+   output.sort(function(workerA, workerB) {
+      if (workerA.interface == workerB.interface)
+         return workerA.timestamp - workerB.timestamp;
+      else
+         return workerA.interface - workerB.interface;
+   })
+}
+
 
 /* methods for writing output csv files */
 

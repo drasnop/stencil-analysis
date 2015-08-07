@@ -23,5 +23,7 @@ input.forEach(function(worker) {
    }
 })
 
+helpers.sortChronologically(exports.output)
+
 console.log(Object.keys(workersWithProblem).length + " workers experienced a problem (" + count + " total)");
 console.log();
