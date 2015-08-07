@@ -15,7 +15,8 @@ totalNumTutorial = 17;
 addPax = false;
 
 // 0: no problems, 1: participant experienced minor bugs, 2: participant experienced major bugs / number of errors
-/*problems = {
+problems = {
+   /* batch 2-24 */
    "mh6oa5uk": 1,
    "zjkgjapb": 2,
    "48oqor59": 2,
@@ -39,11 +40,10 @@ addPax = false;
    "cvmxtfbn": 0,
    "mppakz7p": 0,
    "9wl1dod1": 0,
-   "0vshpky4": 0
-}*/
-problems = {
-   "esjwzi0w": 0,
-   "q1w4y3ox": 0
+   "0vshpky4": 0,
+
+   /* batch 3-24 */
+   "xqpi3r9n": 2
 }
 
 /* helper functions and dependencies */
@@ -88,7 +88,8 @@ helpers.checkData();
 
 /* output */
 
-var scripts = ["workers", "participants", "bonuses", "questionnaires", "trials", "tutorial", "aggregate", "standard-errors", "standard-error"];
+var scripts = ["workers", "problems", "participants", "bonuses", "questionnaires", "trials", "tutorial", "aggregate", "standard-errors", "standard-error"];
+//var scripts = ["problems"];
 
 scripts.forEach(function(script) {
    helpers.writeJSONtoCSVfile(helpers.filename(script), require("./" + script + ".js").output);
