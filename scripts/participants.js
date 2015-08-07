@@ -59,6 +59,7 @@ helpers.validParticipants().forEach(function(participant) {
 
       /* feedback */
 
+      "bugFeedback": helpers.formatStringForCSV(participant.questionnaires.bugFeedback),
       "interfaceFeedback": helpers.formatStringForCSV(participant.questionnaires.preference.feedback),
       "generalFeedback": helpers.formatStringForCSV(participant.questionnaires.additionalFeedback),
 
