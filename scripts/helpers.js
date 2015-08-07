@@ -581,6 +581,7 @@ exports.preprocessData = function() {
    });
 
    // reverse search score to have visual search positive / text-based search negative
+   // TODO change this depending on the batch
    helpers.validParticipants().forEach(function(participant) {
       if (participant.condition.interface > 0) {
 
@@ -590,6 +591,14 @@ exports.preprocessData = function() {
             participant.questionnaires.preference.search = -participant.questionnaires.preference.search;
          }
       }
+   });
+
+   // re-scale timestamps by substracting the first one to all others
+   var earliest = Math.min.apply(null, input.map(function(worker) {
+      return worker.info.timestamp;
+   }))
+   input.forEach(function(worker) {
+      worker.info.timestamp -= earliest;
    });
 }
 

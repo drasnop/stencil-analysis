@@ -30,6 +30,9 @@ input.forEach(function(worker) {
       "questionnaires": latestQuestionnaireCompletedBy(worker),
 
 
+      // if workers reported a problem settting up the experiment software
+      "setupProblem": worker.questionnaires && worker.questionnaires.problemFeedback ? 1 : 0,
+
       // "duplicate" if worker participated more than once
       "duplicate": helpers.isDuplicate(worker) ? "duplicate" : "",
 
@@ -70,9 +73,9 @@ input.forEach(function(worker) {
    }
 
    function getLastInstructionsPage(worker) {
-      return worker.instructions.reduce(function(max, page) {
-         return Math.max(max, page.page)
-      }, 0);
+      return Math.max.apply(null, worker.instructions.map(function(page) {
+         return page.page;
+      }));
    }
 });
 
