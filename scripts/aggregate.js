@@ -1,8 +1,8 @@
 /* compile data for each participant, to be used in ANOVA */
 
 // filter data
-var onlySuccess = true;
-var onlyNonGhost = true;
+var onlySuccess = false;
+var onlyNonGhost = false;
 var onlyCHS = false;
 
 // parse data
