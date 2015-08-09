@@ -600,6 +600,12 @@ exports.preprocessData = function() {
    input.forEach(function(worker) {
       worker.info.timestamp -= earliest;
    });
+
+   // set problems[participant] to 0 if nothing is provided otherwise
+   helpers.validParticipants().forEach(function(participant) {
+      if (!problems[participant.id])
+         problems[participant.id] = 0;
+   });
 }
 
 exports.checkData = function() {
