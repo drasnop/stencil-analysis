@@ -1,22 +1,5 @@
 /* write data for each trial of each valid participant in this batch */
 
-// TODO for next batch: simply get .hideable from target.option
-hideable = [
-   "shortcut_goto_filter_assigned",
-   "shortcut_goto_filter_starred",
-   "shortcut_goto_filter_today",
-   "shortcut_goto_filter_week",
-   "shortcut_goto_filter_all",
-   "shortcut_goto_filter_completed",
-   "smartlist_visibility_assigned_to_me",
-   "smartlist_visibility_starred",
-   "smartlist_visibility_today",
-   "smartlist_visibility_week",
-   "smartlist_visibility_all",
-   "smartlist_visibility_done",
-   "today_smart_list_visible_tasks"
-]
-
 // 0 = not in tutorial, 0.5 = not really, but could be inferred, 0.8 = very similar to one in tutorial, 1 = explicitly in tutorial
 hookInTutorial = {
    "language": 0,
@@ -84,11 +67,9 @@ helpers.validParticipants().forEach(function(participant) {
          "targetOption": trial.target.option,
          "targetTab": wunderlist.options[trial.target.option].tab.name,
          "targetIndex": wunderlist.options[trial.target.option].index,
-         // "targetHideable": hideable.indexOf(trial.target.option) >= 0 ? 1 : 0,
-         "hideable": trial.target.hideable ? 1 : 0,
-         // todo: there should be no ghosts in control
-         "ghost": trial.target.ghost && participant.condition.interface > 0 ? 1 : 0,
-         "showMore": wunderlist.options[trial.target.option].more ? 1 : 0,
+         "targetHideable": trial.target.hideable ? 1 : 0,
+         "targetGhost": trial.target.ghost && participant.condition.interface > 0 ? 1 : 0,
+         "targetShowMore": wunderlist.options[trial.target.option].more ? 1 : 0,
          "hookInTutorial": hookInTutorial[trial.target.option],
 
          "numVisitedTabs": trial.visitedTabs ? trial.visitedTabs.length : 0,
@@ -98,6 +79,7 @@ helpers.validParticipants().forEach(function(participant) {
          "panelWasExpanded": helpers.getChangedOptionPropertyAsNumber(trial, "panelExpanded"),
          "numClusterExpanded": numClusterExpanded(trial),
          "clusterWasExpanded": clusterWasExpanded(trial),
+         "numShowMore": trial.showMoreOptions ? trial.showMoreOptions.length : 0,
 
          "numSelectedHooks": trial.selectedHooks ? trial.selectedHooks.length : 0,
          "numUniqueHooksSelected": numUniqueHooksSelected(trial),
@@ -111,7 +93,7 @@ helpers.validParticipants().forEach(function(participant) {
          "timeout": trial.timeout ? 1 : 0,
          "changedOption": trial.changedOptions ? helpers.getMostInformativeChangedOption(trial).option_ID : "",
          "changedValue": trial.changedOptions ? helpers.getMostInformativeChangedOption(trial).newValue : "",
-         "targetValue": trial.targetValue,
+         "targetValue": trial.target.value,
 
          /* durations */
          "instructionsDuration": trial.duration.instructions,

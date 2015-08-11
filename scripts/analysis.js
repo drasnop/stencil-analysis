@@ -74,6 +74,9 @@ console.log("Pax data added from ", paxPilotDataPath) */
 // add additional info to the first batch, if needed
 helpers.convertBatch112Data();
 
+// rectify some data structure of batch 2-24
+helpers.convertBatch224Data();
+
 // make some changes to the mturk json data to facilitate further processing
 helpers.preprocessData();
 

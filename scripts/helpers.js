@@ -518,6 +518,48 @@ exports.convertBatch112Data = function() {
    }
 }
 
+exports.convertBatch224Data = function() {
+
+   // In later batches, stored directly in target.hideable
+   var hideable = [
+      "shortcut_goto_filter_assigned",
+      "shortcut_goto_filter_starred",
+      "shortcut_goto_filter_today",
+      "shortcut_goto_filter_week",
+      "shortcut_goto_filter_all",
+      "shortcut_goto_filter_completed",
+      "smartlist_visibility_assigned_to_me",
+      "smartlist_visibility_starred",
+      "smartlist_visibility_today",
+      "smartlist_visibility_week",
+      "smartlist_visibility_all",
+      "smartlist_visibility_done",
+      "today_smart_list_visible_tasks"
+   ]
+
+   helpers.validParticipants().forEach(function(participant) {
+      participant.trials.forEach(function(trial) {
+         if (trial.targetOption) {
+            trial.target = {
+               "option": trial.targetOption,
+               "value": trial.targetValue,
+            }
+
+            if (participant.condition.interface > 0) {
+               trial.target.hideable = (hideable.indexOf(trial.target.option) >= 0);
+               if (trial.changedOptions)
+                  trial.target.ghost = exports.getMostInformativeChangedOption(trial).ghost;
+               else
+                  trial.target.ghost = false;
+            }
+         }
+
+         /*         if (participant.condition.interface === 0 && trial.target.ghost)
+                     delete trial.target["ghost"];*/
+      });
+   });
+}
+
 exports.preprocessData = function() {
 
    // creates a convenient enumerating (but non-enumerable!) function
