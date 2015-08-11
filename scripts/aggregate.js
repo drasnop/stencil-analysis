@@ -57,7 +57,7 @@ helpers.validParticipants().forEach(function(participant) {
       return Math.average(tutorialSteps);
    }
 
-   for (var block = 0; block <= 2; block++) {
+   for (var block = 0; block < numBlocks; block++) {
       exports.output.push({
 
          /* general information about this participant */
@@ -96,8 +96,8 @@ helpers.sortByConditionThenParticipantID(exports.output)
 
 
 // print some summary statistics to the console
-console.log(exports.output.length + " participants")
-for (var i = 0; i <= 3; i++) {
+console.log(exports.output.length / numBlocks + " participants x " + numBlocks + " blocks")
+for (var i = 0; i <= numBlocks; i++) {
    var counts = "";
    for (var j = 0; j <= 2; j++) {
       counts += exports.output.filter(filterByInterfaceAndBlock).length + " ";

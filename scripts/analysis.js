@@ -1,18 +1,24 @@
 /* Load dependencies and call other scripts to generate all outputs based on original json file */
 /* Each parsing script must expose an output array */
 
+if (process.argv.length < 3)
+   return console.log("usage: node analysis.js batch-number");
+
+batch = process.argv[2];
+
 // parameters
-batch = "rect-15";
 var inputFolder = batch + "/mturk/";
 var inputFilepath = inputFolder + batch + ".json";
 consoleOutputFilepath = batch + "/" + "info-" + batch + ".log";
+
+totalNumTutorial = 17;
+totalNumTrials = 41;
+numBlocks = 3;
+
 basePayment = 2;
 bonusPerTrial = 0.05;
 bonusPerTab = 0.03;
 bonusPerOption = 0.03;
-totalNumTrials = 41;
-totalNumTutorial = 17;
-addPax = false;
 
 // 0: no problems, 0.5: no reported problems but was redone do be sure,
 // 1: participant experienced minor bugs, 2: participant experienced major bugs / number of errors
@@ -60,12 +66,10 @@ input = JSON.parse(fs.readFileSync(inputFilepath, 'utf8'));
 console.log("Input file parsed: ", inputFilepath)
 console.log()
 
-// add pax's data, to have an even number of participants
-if (addPax) {
-   var paxPilotDataPath = "pilots/pax-pilot-reformatted.json";
-   input["pax"] = JSON.parse(fs.readFileSync(paxPilotDataPath, "utf8")).pax;
-   console.log("Pax data added from ", paxPilotDataPath)
-}
+/* // add pax's data, to have an even number of participants
+var paxPilotDataPath = "pilots/pax-pilot-reformatted.json";
+input["pax"] = JSON.parse(fs.readFileSync(paxPilotDataPath, "utf8")).pax;
+console.log("Pax data added from ", paxPilotDataPath) */
 
 // add additional info to the first batch, if needed
 helpers.convertBatch112Data();
