@@ -312,6 +312,9 @@ exports.sortByConditionThenTimestamp = function(output) {
 // convert array of JSON objects into a multi-line csv representation
 function JSONtoCSV(data) {
 
+   if (!data.length)
+      return [];
+
    var array = [];
 
    // headers are the keys of each JSON object
@@ -580,18 +583,19 @@ exports.preprocessData = function() {
       });
    });
 
-   // reverse search score to have visual search positive / text-based search negative
-   // TODO change this depending on the batch
-   helpers.validParticipants().forEach(function(participant) {
-      if (participant.condition.interface > 0) {
+   // reverse search score to have visual search positive / text-based search negative, for batch 2-24
+   if (batch == "2-24") {
+      helpers.validParticipants().forEach(function(participant) {
+         if (participant.condition.interface > 0) {
 
-         // weird behavior: parsing "0" to integer causes it to be unrecognized (null) in the csv...
-         if (participant.questionnaires.preference.search != 0) {
-            participant.questionnaires.preference.search = parseInt(participant.questionnaires.preference.search);
-            participant.questionnaires.preference.search = -participant.questionnaires.preference.search;
+            // weird behavior: parsing "0" to integer causes it to be unrecognized (null) in the csv...
+            if (participant.questionnaires.preference.search != 0) {
+               participant.questionnaires.preference.search = parseInt(participant.questionnaires.preference.search);
+               participant.questionnaires.preference.search = -participant.questionnaires.preference.search;
+            }
          }
-      }
-   });
+      });
+   }
 
    // re-scale timestamps by substracting the first one to all others
    var earliest = Math.min.apply(null, input.map(function(worker) {

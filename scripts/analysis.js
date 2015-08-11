@@ -2,7 +2,7 @@
 /* Each parsing script must expose an output array */
 
 // parameters
-batch = "3-24";
+batch = "rect-15";
 var inputFolder = batch + "/mturk/";
 var inputFilepath = inputFolder + batch + ".json";
 consoleOutputFilepath = batch + "/" + "info-" + batch + ".log";
@@ -14,18 +14,22 @@ totalNumTrials = 41;
 totalNumTutorial = 17;
 addPax = false;
 
-// 0: no problems, 1: participant experienced minor bugs, 2: participant experienced major bugs / number of errors
+// 0: no problems, 0.5: no reported problems but was redone do be sure,
+// 1: participant experienced minor bugs, 2: participant experienced major bugs / number of errors
 problems = {
    /* batch 2-24 */
-   "mh6oa5uk": 1,
-   "zjkgjapb": 2,
    "48oqor59": 2,
    "bw6ge9qu": 2,
-   "y2flppmw": 1,
    "e3idjgam": 2,
    "fsk2fgmq": 1,
-   "phjh26hc": 1,
+   "h4hgn25j": 0.5,
    "kkve0dki": 2,
+   "mh6oa5uk": 1,
+   "phjh26hc": 1,
+   "u9tfna64": 0.5,
+   "y2flppmw": 1,
+   "ziyzp70i": 0.5,
+   "zjkgjapb": 2,
    "k5a0l1ni": 1,
    "ymkonwth": 2,
 
