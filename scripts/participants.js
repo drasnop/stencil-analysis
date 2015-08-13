@@ -1,15 +1,19 @@
 /* write summary of all the valid participants in this batch, combining useful information from workers.js and questionnaire.js */
 
-var minTrialNumber = 1;
+// exclude practice trial
+var minBlockNumber = 1;
 
 exports.output = [];
 helpers.validParticipants().forEach(function(participant) {
 
+   var shortDurations = [];
    var logShortDurations = [];
 
    participant.trials.forEach(function(trial) {
-      if (trial.number >= minTrialNumber)
+      if (helpers.getBlock(trial) >= minBlockNumber) {
+         shortDurations.push(trial.duration.short);
          logShortDurations.push(Math.log(1 + trial.duration.short));
+      }
    });
 
    exports.output.push({
@@ -45,6 +49,7 @@ helpers.validParticipants().forEach(function(participant) {
       "numTimeouts": helpers.getNumTimeouts(participant),
       "numErrors": totalNumTrials - helpers.getNumSuccesses(participant),
       "averageLogShortDuration": (Math.exp(Math.average(logShortDurations)) - 1).toFixed(1),
+      "medianShortDuration": Math.median(shortDurations).toFixed(1),
       // my own classification of problematic participants, to see the impact of the num of errors and duration
       "problems": problems[participant.id] == 2 ? "MAJOR" : problems[participant.id] == 1 ? "minor" : "",
 
