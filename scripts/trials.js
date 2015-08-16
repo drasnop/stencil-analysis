@@ -56,7 +56,8 @@ helpers.validParticipants().forEach(function(participant) {
 
          "id": participant.id,
          "problems": problems[participant.id],
-         "defaults": participant.condition.oppositeDefaults ? "opposite" : "",
+         "defaults": participant.condition.oppositeDefaults,
+         "partition": participant.condition.partition,
          "interface": participant.condition.interface,
          "interfaceType": participant.condition.interface > 0 ? "customizationMode" : "control",
 
@@ -89,8 +90,8 @@ helpers.validParticipants().forEach(function(participant) {
 
          /* outcome */
 
-         "success": trial.success ? 1 : 0,
-         "timeout": trial.timeout ? 1 : 0,
+         "success": trial.success,
+         "timeout": trial.timeout,
          "changedOption": trial.changedOptions ? helpers.getMostInformativeChangedOption(trial).option_ID : "",
          "changedValue": trial.changedOptions ? helpers.getMostInformativeChangedOption(trial).newValue : "",
          "targetValue": trial.target.value,
