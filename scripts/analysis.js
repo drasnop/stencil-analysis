@@ -38,9 +38,6 @@ problems = {
    "zjkgjapb": 2,
    "k5a0l1ni": 1,
    "ymkonwth": 2,
-
-   /* batch 3-24 */
-   /*"xqpi3r9n": 2 This person is in fact an outlier*/
 }
 
 /* helper functions and dependencies */
