@@ -38,9 +38,6 @@ problems = {
    "zjkgjapb": 2,
    "k5a0l1ni": 1,
    "ymkonwth": 2,
-
-   /* batch 3-24 */
-   "xqpi3r9n": 2
 }
 
 /* helper functions and dependencies */
@@ -53,11 +50,8 @@ wunderlist = {
    "mappings": JSON.parse(fs.readFileSync(inputFolder + "mappings_wunderlist.json", 'utf8'))
 }
 
-// prepare logging of console ouput to text file
-logStream = fs.createWriteStream(consoleOutputFilepath, {
-   flags: 'w'
-});
-
+// rewire console.log to also print to a file
+helpers.saveConsoleOutputToFile();
 
 /* input */
 

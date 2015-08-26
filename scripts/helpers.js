@@ -341,12 +341,11 @@ function ArrayToCSV(data) {
 
 // write an entire csv file at once, from a JSON object
 exports.writeJSONtoCSVfile = function(filename, data) {
-   var csv = JSONtoCSV(data);
-   writeFile(filename, csv);
+   exports.writeFile(filename, JSONtoCSV(data));
 }
 
 // write some content in a file, creating directories if needed
-function writeFile(filename, content) {
+exports.writeFile = function(filename, content) {
    /*   var mkdirp = require("mkdirp")
       var getDirName = require("path").dirname
 
@@ -370,31 +369,39 @@ exports.formatStringForCSV = function(string) {
    return '"' + string.split('"').join("'") + '"';
 }
 
-// rewire console.log to also print to a file
-console.originalLog = console.log.bind(console);
-console.log = function() {
-   // True array copy
-   var args = Array.prototype.slice.call(arguments, 0);
+exports.saveConsoleOutputToFile = function() {
 
-   if (arguments.length) {
+   // prepare logging of console ouput to text file
+   var logStream = fs.createWriteStream(consoleOutputFilepath, {
+      flags: 'w'
+   });
 
-      // If there is a format string then... it must be a string
-      if (typeof arguments[0] === "string") {
-         // Log the whole array
-         this.originalLog.apply(this, args);
+   // rewire console.log to also print to a file
+   console.originalLog = console.log.bind(console);
+   console.log = function() {
+      // True array copy
+      var args = Array.prototype.slice.call(arguments, 0);
+
+      if (arguments.length) {
+
+         // If there is a format string then... it must be a string
+         if (typeof arguments[0] === "string") {
+            // Log the whole array
+            this.originalLog.apply(this, args);
+         } else {
+            // "Normal" log
+            this.originalLog(args);
+         }
       } else {
-         // "Normal" log
-         this.originalLog(args);
+         // print empty line
+         this.originalLog();
       }
-   } else {
-      // print empty line
-      this.originalLog();
-   }
 
-   // copy output to external file
-   //this.originalLog(consoleOutputFilepath)
-   logStream.write(args.join(' ') + '\n');
-};
+      // copy output to external file
+      //this.originalLog(consoleOutputFilepath)
+      logStream.write(args.join(' ') + '\n');
+   };
+}
 
 
 /* Math functions */
