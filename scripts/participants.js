@@ -48,6 +48,7 @@ helpers.validParticipants().forEach(function(participant) {
 
       "numTimeouts": helpers.getNumTimeouts(participant),
       "numErrors": totalNumTrials - helpers.getNumSuccesses(participant),
+      "numCorrectHookSelected": getNumCorrectHookSelected(participant),
       "averageLogShortDuration": (Math.exp(Math.average(logShortDurations)) - 1).toFixed(1),
       "medianShortDuration": Math.median(shortDurations).toFixed(1),
       // my own classification of problematic participants, to see the impact of the num of errors and duration
@@ -77,6 +78,11 @@ helpers.validParticipants().forEach(function(participant) {
 
 helpers.sortByConditionThenTimestamp(exports.output)
 
+function getNumCorrectHookSelected(participant) {
+   return participant.trials.filter(function(trial) {
+      return trial.correctHookHasBeenSelected;
+   }).length;
+}
 
 function getAverageValueForValidParticipants(getter, average) {
    return average(helpers.validParticipants().map(function(participant) {
