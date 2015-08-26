@@ -1,7 +1,7 @@
 /* helper functions for enumerating the data and writing csv files */
 
 // standardized filename and location for all parsing scripts
-exports.filename = function(name) {
+exports.filename = function(batch, name) {
    return batch + "/" + name + "-" + batch + ".csv";
 }
 
@@ -323,7 +323,14 @@ function JSONtoCSV(data) {
    // flatten the JSON into an array representation
    data.forEach(function(JSONline) {
       array.push(Object.keys(JSONline).map(function(key) {
-         return JSONline[key];
+         // converts booleans to TRUE and FALSE
+         if (typeof JSONline[key] == "boolean") {
+            if (JSONline[key])
+               return "TRUE";
+            else
+               return "FALSE";
+         } else
+            return JSONline[key];
       }))
    });
 
@@ -567,7 +574,7 @@ exports.convertBatch224Data = function() {
    });
 }
 
-exports.preprocessData = function() {
+exports.preprocessData = function(batch) {
 
    // creates a convenient enumerating (but non-enumerable!) function
    Object.defineProperty(wunderlist.tabs, "forEachNonBloat", {
