@@ -1,6 +1,6 @@
 /* Load all results.csv files from MTurk, and check that there are no duplicate workers */
 
-var batches = ["1-20", "2-24", "3-24", "rect-15", "4-12", "rect-2"];
+var batches = ["1-20", "2-24", "3-24", "rect-15", "4-12", "rect-2", "rect-2bis"];
 var filenames = batches.map(function(batch) {
    return "mturk_results_for_approval/Batch_" + batch + "_results.csv";
 })
