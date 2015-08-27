@@ -52,7 +52,7 @@ helpers.validParticipants().forEach(function(participant) {
       "averageLogShortDuration": (Math.exp(Math.average(logShortDurations)) - 1).toFixed(1),
       "medianShortDuration": Math.median(shortDurations).toFixed(1),
       // my own classification of problematic participants, to see the impact of the num of errors and duration
-      "problems": problems[participant.id] == 2 ? "MAJOR" : problems[participant.id] == 1 ? "minor" : "",
+      "problems": printProblem(participant),
 
       /* durations */
 
@@ -100,6 +100,21 @@ function getHourlyRate(participant) {
 
 function printFormattedMeanPayments(getter) {
    return getAverageValueForValidParticipants(getter, Math.average).toFixed(2) + ' [' + getAverageValueForValidParticipants(getter, Math.geometricMean).toFixed(2) + ']';
+}
+
+function printProblem(participant) {
+   switch (problems[participant.id]) {
+      case 2:
+         return "MAJOR";
+      case 1:
+         return "minor";
+      case 0.9:
+         return "duplicate";
+      case 0.5:
+         return "unsure";
+      default:
+         return "";
+   }
 }
 
 
