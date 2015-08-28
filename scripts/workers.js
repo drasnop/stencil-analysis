@@ -45,6 +45,8 @@ input.forEach(function(worker) {
       // "valid" if worker completed the experiment, but did not attempt to complete it multiple times
       "valid": helpers.isValid(worker) ? "valid" : "",
 
+      // "final" if worker has been selected in the final set of participants
+      "final": helpers.isFinal(worker) ? "final" : "",
 
       // time it took participants to complete all steps of the tutorial
       "tutorialDuration": worker.tutorial ? helpers.getTutorialDuration(worker) : "",
@@ -99,4 +101,5 @@ console.log(Object.keys(helpers.startedTutorialButNotCompleteWorkers()).length +
 console.log(Object.keys(startedExperiment).length + " workers started experiment but did not complete it (" + numTrials.join(", ") + ")");
 console.log(Object.keys(helpers.completeParticipants()).length + " complete participants");
 console.log(Object.keys(helpers.validParticipants()).length + " valid participants");
+console.log(Object.keys(helpers.finalParticipants()).length + " final participants");
 console.log();

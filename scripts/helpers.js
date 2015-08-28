@@ -5,6 +5,15 @@ exports.filename = function(batch, name) {
    return batch + "/" + name + "-" + batch + ".csv";
 }
 
+// check if this worker is part of the pool of participants used in the analysis
+exports.isFinal = function(worker) {
+   return problems[worker.id] <= 0 && !exports.isOutlier(worker);
+}
+
+exports.isOutlier = function(worker) {
+   return outliers.indexOf(worker.id) >= 0;
+}
+
 // check if a worker has completed the experiment only once (can still be a duplicate, but only completing once)
 exports.isValid = function(worker) {
    return exports.isComplete(worker) && !exports.isBadDuplicate(worker);
@@ -83,16 +92,12 @@ exports.startedExperimentButNotCompleteWorkers = function() {
 
 // get all the duplicate participants in this batch (not unique)
 exports.duplicateWorkers = function() {
-   return input.filter(function(worker) {
-      return exports.isDuplicate(worker);
-   })
+   return input.filter(exports.isDuplicate);
 }
 
 // get all the bad duplicate participants in this batch (not unique?)
 exports.badDuplicateWorkers = function() {
-   return input.filter(function(worker) {
-      return exports.isBadDuplicate(worker);
-   })
+   return input.filter(exports.isBadDuplicate);
 }
 
 // get all the bad duplicate participants in this batch who are also complete (not unique?)
@@ -104,16 +109,17 @@ exports.badDuplicateAndCompleteWorkers = function() {
 
 // filters out all the incomplete participants in this batch
 exports.completeParticipants = function() {
-   return input.filter(function(worker) {
-      return exports.isComplete(worker);
-   })
+   return input.filter(exports.isComplete);
 }
 
 // filters out all the invalid participants in this batch
 exports.validParticipants = function() {
-   return input.filter(function(worker) {
-      return exports.isValid(worker);
-   })
+   return input.filter(exports.isValid);
+}
+
+// filters out all the outliers and the participants who encountered bugs in this batch
+exports.finalParticipants = function() {
+   return input.filter(exports.isFinal);
 }
 
 // indicate which participants tried to do the experiment multiple times (even if it was never valid)
@@ -334,11 +340,11 @@ function JSONtoCSV(data) {
       }))
    });
 
-   return ArrayToCSV(array);
+   return exports.arrayToCSV(array);
 }
 
 // convert a 2D array into a multi-line csv representation
-function ArrayToCSV(data) {
+exports.arrayToCSV = function(data) {
    var csv = data.map(function(line) {
       return line.join(",");
    })

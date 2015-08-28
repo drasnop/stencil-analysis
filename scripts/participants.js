@@ -80,7 +80,7 @@ helpers.sortByConditionThenTimestamp(exports.output)
 
 function getNumCorrectHookSelected(participant) {
    return participant.trials.filter(function(trial) {
-      return trial.correctHookHasBeenSelected;
+      return helpers.getBlock(trial) >= minBlockNumber && trial.correctHookHasBeenSelected;
    }).length;
 }
 

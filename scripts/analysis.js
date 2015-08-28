@@ -6,6 +6,44 @@ if (process.argv.length < 3)
 
 var batch = process.argv[2];
 
+// parameters
+totalNumTutorial = 17;
+totalNumTrials = 41;
+numBlocks = 3;
+
+basePayment = 2;
+bonusPerTrial = 0.05;
+bonusPerTab = 0.03;
+bonusPerOption = 0.03;
+
+// 0: no problems, 0.5: no reported problems but was redone do be sure, 0.9: duplicate participants,
+// 1: participant experienced minor bugs, 2: participant experienced major bugs / number of errors
+problems = {
+   /* batch 2-24 */
+   "48oqor59": 2,
+   "bw6ge9qu": 2,
+   "e3idjgam": 2,
+   "fsk2fgmq": 1,
+   "h4hgn25j": 0.5,
+   "kkve0dki": 2,
+   "mh6oa5uk": 1,
+   "phjh26hc": 1,
+   "u9tfna64": 0.5,
+   "y2flppmw": 1,
+   "ziyzp70i": 0.5,
+   "zjkgjapb": 2,
+   "k5a0l1ni": 1,
+   "ymkonwth": 2,
+
+   /* batch 4-12 */
+   "esfq3ee6": 0.9,
+   "l04et6xn": 0.9
+}
+
+// whether these valid participants were outliers (determined from boxplots on duration and number of errors)
+outliers = ["xqpi3r9n", "bicjgan9", "yacy699g"]
+
+
 if (batch == "all") {
    ["2-24", "3-24", "rect-15", "4-12", "rect-2"].forEach(analyzeBatch)
 } else
@@ -13,39 +51,10 @@ if (batch == "all") {
 
 function analyzeBatch(batch) {
 
-   // parameters
+   // files
    var inputFolder = batch + "/mturk/";
    var inputFilepath = inputFolder + batch + ".json";
    consoleOutputFilepath = batch + "/" + "info-" + batch + ".log";
-
-   totalNumTutorial = 17;
-   totalNumTrials = 41;
-   numBlocks = 3;
-
-   basePayment = 2;
-   bonusPerTrial = 0.05;
-   bonusPerTab = 0.03;
-   bonusPerOption = 0.03;
-
-   // 0: no problems, 0.5: no reported problems but was redone do be sure,
-   // 1: participant experienced minor bugs, 2: participant experienced major bugs / number of errors
-   problems = {
-      /* batch 2-24 */
-      "48oqor59": 2,
-      "bw6ge9qu": 2,
-      "e3idjgam": 2,
-      "fsk2fgmq": 1,
-      "h4hgn25j": 0.5,
-      "kkve0dki": 2,
-      "mh6oa5uk": 1,
-      "phjh26hc": 1,
-      "u9tfna64": 0.5,
-      "y2flppmw": 1,
-      "ziyzp70i": 0.5,
-      "zjkgjapb": 2,
-      "k5a0l1ni": 1,
-      "ymkonwth": 2,
-   }
 
    /* helper functions and dependencies */
 
