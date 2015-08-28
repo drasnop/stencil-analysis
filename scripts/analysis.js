@@ -92,7 +92,7 @@ function analyzeBatch(batch) {
    helpers.convertBatch224Data();
 
    // rectify some data structure of batch lab
-   if (batch == "lab")
+   if (within)
       helpers.convertWithinSubjectsData();
 
    // make some changes to the mturk json data to facilitate further processing
@@ -104,9 +104,9 @@ function analyzeBatch(batch) {
 
    /* output */
 
-   var scripts = ["workers", "problems", "participants", "bonuses", "trials", "tutorial", "aggregate", "standard-errors", "standard-error"];
-   if (batch != "lab")
-      scripts.push("questionnaires");
+   var scripts = ["workers", "problems", "participants", "trials", "tutorial"];
+   if (!within)
+      scripts.push("bonuses", "questionnaires", "aggregate", "standard-errors", "standard-error");
 
    scripts.forEach(function(script) {
       helpers.writeJSONtoCSVfile(helpers.filename(batch, script), require("./" + script + ".js").output);

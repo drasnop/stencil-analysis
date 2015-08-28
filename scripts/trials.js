@@ -50,6 +50,12 @@ helpers.validParticipants().forEach(function(participant) {
 
    participant.trials.forEach(function(trial) {
 
+      var interface;
+      if (!within)
+         interface = participant.condition.interface;
+      else
+         interface = helpers.conditions[participant.pid][helpers.getBlock(trial)];
+
       exports.output.push({
 
          /* general information about this participant */
@@ -58,8 +64,8 @@ helpers.validParticipants().forEach(function(participant) {
          "problems": problems[participant.id],
          "defaults": participant.condition.oppositeDefaults,
          "partition": participant.condition.partition,
-         "interface": participant.condition.interface,
-         "interfaceType": participant.condition.interface > 0 ? "customizationMode" : "control",
+         "interface": interface,
+         "interfaceType": interface > 0 ? "customizationMode" : "control",
 
          /* info about this trial */
 
@@ -214,14 +220,20 @@ function numTrueTotalUniqueHooksSelected(participant, trial) {
 }
 
 
-// sort by condition then participant then trialNumber, to make it easier to read
+// sort by condition (if not within), then participant then trialNumber, to make it easier to read
 exports.output.sort(function(workerDataA, workerDataB) {
+   if (within)
+      return compareParticipantThenTrialNumber(workerDataA, workerDataB);
 
-   if (workerDataA.interface == workerDataB.interface) {
-      if (workerDataA.id == workerDataB.id) {
-         return workerDataA.trialNumber - workerDataB.trialNumber;
-      }
-      return helpers.compareAlphaNum(workerDataA.id, workerDataB.id);
-   }
-   return workerDataA.interface - workerDataB.interface;
+   if (workerDataA.interface == workerDataB.interface)
+      return compareParticipantThenTrialNumber(workerDataA, workerDataB)
+   else
+      return workerDataA.interface - workerDataB.interface;
 })
+
+function compareParticipantThenTrialNumber(workerDataA, workerDataB) {
+   if (workerDataA.id == workerDataB.id) {
+      return workerDataA.trialNumber - workerDataB.trialNumber;
+   }
+   return helpers.compareAlphaNum(workerDataA.id, workerDataB.id);
+}

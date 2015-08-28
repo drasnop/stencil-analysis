@@ -206,12 +206,10 @@ exports.getTrial = function(participant, trialNumber) {
 }
 
 exports.getBlock = function(trial) {
-   if (trial.number >= 21)
-      return 2;
-   if (trial.number >= 1)
-      return 1;
+   if (within)
+      return Math.ceil(trial.number / 10);
    else
-      return 0;
+      return Math.ceil(trial.number / 20);
 }
 
 exports.getSelector = function(option_id) {
@@ -585,36 +583,36 @@ exports.convertBatch224Data = function() {
    });
 }
 
-exports.convertWithinSubjectsData = function() {
+// all orders of conditions, blocked by interface type, for participants 1 to 12 (row 0 is dev, col 0 is practice trial interface)
+exports.conditions = [
+   [1, 0, 1, 2, 3],
+   [1, 0, 1, 2, 3],
+   [1, 0, 1, 3, 2],
+   [2, 0, 2, 1, 3],
+   [2, 0, 2, 3, 1],
+   [3, 0, 3, 1, 2],
+   [3, 0, 3, 2, 1],
+   [1, 1, 2, 3, 0],
+   [1, 1, 3, 2, 0],
+   [2, 2, 1, 3, 0],
+   [2, 2, 3, 1, 0],
+   [3, 3, 1, 2, 0],
+   [3, 3, 2, 1, 0]
+];
 
-   // all orders of conditions, blocked by interface type, for participants 1 to 12 (0 is dev)
-   conditions = [
-      [0, 1, 2, 3],
-      [0, 1, 2, 3],
-      [0, 1, 3, 2],
-      [0, 2, 1, 3],
-      [0, 2, 3, 1],
-      [0, 3, 1, 2],
-      [0, 3, 2, 1],
-      [1, 2, 3, 0],
-      [1, 3, 2, 0],
-      [2, 1, 3, 0],
-      [2, 3, 1, 0],
-      [3, 1, 2, 0],
-      [3, 2, 1, 0]
-   ];
+exports.convertWithinSubjectsData = function() {
 
    input.forEach(function(participant) {
       if (!participant.condition) {
          participant.condition = {
             // All but one participants started with opposite defaults
             "oppositeDefaults": participant.id == "lotaculi1" ? false : true,
-            "interface": conditions[participant.pid].join("")
+            "interface": exports.conditions[participant.pid].join("")
          }
 
          // make up information
          participant.info.worker_id = participant.id;
-         participant.info.assignment_id = "lab" + conditions[participant.pid].join("");
+         participant.info.assignment_id = "lab" + exports.conditions[participant.pid].join("");
          participant.info.timestamp = participant.pid;
       }
 
