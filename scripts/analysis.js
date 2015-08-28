@@ -43,7 +43,11 @@ problems = {
 // whether these valid participants were outliers (determined from boxplots on duration and number of errors)
 outliers = ["xqpi3r9n", "bicjgan9", "yacy699g"]
 
+// set flag for within-subjects analysis
+if (batch == "lab")
+   within = true;
 
+// tentative to run all between-subjects analyses together
 if (batch == "all") {
    ["2-24", "3-24", "rect-15", "4-12", "rect-2"].forEach(analyzeBatch)
 } else
@@ -87,6 +91,10 @@ function analyzeBatch(batch) {
    // rectify some data structure of batch 2-24
    helpers.convertBatch224Data();
 
+   // rectify some data structure of batch lab
+   if (batch == "lab")
+      helpers.convertWithinSubjectsData();
+
    // make some changes to the mturk json data to facilitate further processing
    helpers.preprocessData(batch);
 
@@ -96,8 +104,9 @@ function analyzeBatch(batch) {
 
    /* output */
 
-   var scripts = ["workers", "problems", "participants", "bonuses", "questionnaires", "trials", "tutorial", "aggregate", "standard-errors", "standard-error"];
-   //var scripts = ["aggregate"];
+   var scripts = ["workers", "problems", "participants", "bonuses", "trials", "tutorial", "aggregate", "standard-errors", "standard-error"];
+   if (batch != "lab")
+      scripts.push("questionnaires");
 
    scripts.forEach(function(script) {
       helpers.writeJSONtoCSVfile(helpers.filename(batch, script), require("./" + script + ".js").output);

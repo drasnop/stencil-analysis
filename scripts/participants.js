@@ -16,7 +16,7 @@ helpers.validParticipants().forEach(function(participant) {
       }
    });
 
-   exports.output.push({
+   var data = {
 
       /* general information about this participant */
 
@@ -60,19 +60,23 @@ helpers.validParticipants().forEach(function(participant) {
       "tutorialDuration": helpers.getTutorialDuration(participant).toFixed(1),
       // time it took participants to complete all the trials of the experiment
       "trialsDuration": helpers.getTrialsDuration(participant).toFixed(0),
+   }
+
+   if (!within) {
       // time it took participants to reach the final page, in minutes
-      "totalDuration": helpers.getTotalDuration(participant).toFixed(0),
+      data.totalDuration = helpers.getTotalDuration(participant).toFixed(0);
 
       /* feedback */
 
-      "bugFeedback": helpers.formatStringForCSV(participant.questionnaires.bugFeedback),
-      "interfaceFeedback": helpers.formatStringForCSV(participant.questionnaires.preference.feedback),
-      "generalFeedback": helpers.formatStringForCSV(participant.questionnaires.additionalFeedback),
+      data.bugFeedback = helpers.formatStringForCSV(participant.questionnaires.bugFeedback);
+      data.interfaceFeedback = helpers.formatStringForCSV(participant.questionnaires.preference.feedback);
+      data.generalFeedback = helpers.formatStringForCSV(participant.questionnaires.additionalFeedback);
 
       // base rate + bonus for that participant, if any
-      "payment": helpers.getPayment(participant)
-   })
+      data.payment = helpers.getPayment(participant);
+   }
 
+   exports.output.push(data);
 });
 
 

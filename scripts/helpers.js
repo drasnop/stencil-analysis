@@ -29,8 +29,8 @@ exports.isComplete = function(worker) {
    if (!worker.trials || worker.trials.length < totalNumTrials)
       return false;
 
-   // filter out people who did not complete all the questionnaires
-   if (!worker.questionnaires || !worker.questionnaires.recognition || !worker.questionnaires.preference || !worker.questionnaires.demographics)
+   // filter out people who did not complete all the questionnaires (NB: demographics was the last one on MTurk)
+   if (!worker.questionnaires || !worker.questionnaires.demographics)
       return false;
 
    return true;
@@ -164,6 +164,9 @@ exports.getTrialsDuration = function(worker) {
 }
 
 exports.getTotalDuration = function(worker) {
+   if (!worker.instructions)
+      return 0;
+
    // compute duration in seconds
    var duration = worker.instructions.reduce(function(duration, page) {
       return duration + page.duration;
@@ -185,8 +188,10 @@ exports.getBonus = function(worker) {
       return trial.number > 0 && trial.success;
    }).length;
 
-   bonus += Math.max(0, (2 * worker.questionnaires.recognition.tabs.score - 10) * bonusPerTab);
-   bonus += Math.max(0, (2 * worker.questionnaires.recognition.options.score - 20) * bonusPerOption);
+   if (worker.questionnaires.recognition) {
+      bonus += Math.max(0, (2 * worker.questionnaires.recognition.tabs.score - 10) * bonusPerTab);
+      bonus += Math.max(0, (2 * worker.questionnaires.recognition.options.score - 20) * bonusPerOption);
+   }
 
    return bonus;
 }
@@ -576,6 +581,49 @@ exports.convertBatch224Data = function() {
 
          /*         if (participant.condition.interface === 0 && trial.target.ghost)
                      delete trial.target["ghost"];*/
+      });
+   });
+}
+
+exports.convertWithinSubjectsData = function() {
+
+   // all orders of conditions, blocked by interface type, for participants 1 to 12 (0 is dev)
+   conditions = [
+      [0, 1, 2, 3],
+      [0, 1, 2, 3],
+      [0, 1, 3, 2],
+      [0, 2, 1, 3],
+      [0, 2, 3, 1],
+      [0, 3, 1, 2],
+      [0, 3, 2, 1],
+      [1, 2, 3, 0],
+      [1, 3, 2, 0],
+      [2, 1, 3, 0],
+      [2, 3, 1, 0],
+      [3, 1, 2, 0],
+      [3, 2, 1, 0]
+   ];
+
+   input.forEach(function(participant) {
+      if (!participant.condition) {
+         participant.condition = {
+            // All but one participants started with opposite defaults
+            "oppositeDefaults": participant.id == "lotaculi1" ? false : true,
+            "interface": conditions[participant.pid].join("")
+         }
+
+         // make up information
+         participant.info.worker_id = participant.id;
+         participant.info.assignment_id = "lab" + conditions[participant.pid].join("");
+         participant.info.timestamp = participant.pid;
+      }
+
+      // reorder trials so that the practice trial always appear at the front of the array
+      Object.keys(participant.trials).forEach(function(key) {
+         if (participant.trials[key].number === 0 && participant.pid <= 6) {
+            participant.trials["---"] = participant.trials[key];
+            delete participant.trials[key];
+         }
       });
    });
 }
