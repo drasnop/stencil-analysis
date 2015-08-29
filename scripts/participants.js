@@ -79,8 +79,10 @@ helpers.validParticipants().forEach(function(participant) {
    exports.output.push(data);
 });
 
-
-helpers.sortByConditionThenTimestamp(exports.output)
+if (within)
+   helpers.sortByParticipantID(exports.output);
+else
+   helpers.sortByConditionThenTimestamp(exports.output);
 
 function getNumCorrectHookSelected(participant) {
    return participant.trials.filter(function(trial) {

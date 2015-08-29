@@ -305,6 +305,12 @@ exports.sortByConditionThenParticipantID = function(output) {
    })
 }
 
+exports.sortByParticipantID = function(output) {
+   output.sort(function(workerA, workerB) {
+      return exports.compareAlphaNum(workerA.id, workerB.id);
+   })
+}
+
 // sort by condition then chronologically
 exports.sortByConditionThenTimestamp = function(output) {
    output.sort(function(workerA, workerB) {
