@@ -105,7 +105,9 @@ function analyzeBatch(batch) {
    /* output */
 
    var scripts = ["workers", "problems", "participants", "trials", "tutorial"];
-   if (!within)
+   if (within)
+      scripts.push("intermediate")
+   else
       scripts.push("bonuses", "questionnaires", "aggregate", "standard-errors", "standard-error");
 
    scripts.forEach(function(script) {
