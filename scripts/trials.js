@@ -81,7 +81,7 @@ helpers.validParticipants().forEach(function(participant) {
 
          "numVisitedTabs": trial.visitedTabs ? trial.visitedTabs.length : 0,
          "numChangedOptions": trial.changedOptions ? trial.changedOptions.length : 0,
-         "correctHookHasBeenSelected": trial.correctHookHasBeenSelected ? 1 : 0,
+         "correctAnchorHasBeenSelected": trial.correctHookHasBeenSelected ? 1 : 0,
          "numPanelExpanded": numPanelExpanded(trial),
          "panelWasExpanded": helpers.getChangedOptionPropertyAsNumber(trial, "panelExpanded"),
          "numClusterExpanded": numClusterExpanded(trial),

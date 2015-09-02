@@ -44,8 +44,7 @@ problems = {
 outliers = ["xqpi3r9n", "bicjgan9", "yacy699g"]
 
 // set flag for within-subjects analysis
-if (batch == "lab")
-   within = true;
+within = (batch == "lab");
 
 // tentative to run all between-subjects analyses together
 if (batch == "all") {

@@ -48,7 +48,7 @@ helpers.validParticipants().forEach(function(participant) {
 
       "numTimeouts": helpers.getNumTimeouts(participant),
       "numErrors": totalNumTrials - helpers.getNumSuccesses(participant),
-      "numCorrectHookSelected": getNumCorrectHookSelected(participant),
+      "numCorrectAnchorSelected": getNumCorrectHookSelected(participant),
       "averageLogShortDuration": (Math.exp(Math.average(logShortDurations)) - 1).toFixed(1),
       "medianShortDuration": Math.median(shortDurations).toFixed(1),
       // my own classification of problematic participants, to see the impact of the num of errors and duration
