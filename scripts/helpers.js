@@ -431,6 +431,10 @@ exports.saveConsoleOutputToFile = function() {
 
 // compare two alphanumeric strings
 exports.compareAlphaNum = function(a, b) {
+
+   if (typeof a == 'number' && typeof b == 'number')
+      return a > b ? 1 : -1;
+
    var reA = /[^a-zA-Z]/g;
    var reN = /[^0-9]/g;
 

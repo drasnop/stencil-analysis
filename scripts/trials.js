@@ -60,7 +60,7 @@ helpers.validParticipants().forEach(function(participant) {
 
          /* general information about this participant */
 
-         "id": participant.id,
+         "id": participant.pid ? participant.pid : participant.id,
          "problems": problems[participant.id],
          "defaults": participant.condition.oppositeDefaults,
          "partition": participant.condition.partition,

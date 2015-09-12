@@ -6,6 +6,7 @@ helpers.validParticipants().forEach(function(participant) {
    exports.output.push({
 
       "id": participant.id,
+      "problems": problems[participant.id],
 
       /* demographics */
 
